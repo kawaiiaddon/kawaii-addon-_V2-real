@@ -1,37 +1,64 @@
 name: Publish Development Build
-on: push
+on:
+  push:
+    branches:
+      - '**'
+  workflow_dispatch:
 
 jobs:
-  build:
+  prepare:
     runs-on: ubuntu-latest
-
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-            persist-credentials: false
+          fetch-depth: 0
+          
+      - name: Get all branches
+        id: set-matrix
+        run: |
+          BRANCHES=$(git branch -r | grep -v '\->' | sed 's/origin\///' | grep -v '^HEAD' | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          echo "matrix={\"branch\":$BRANCHES}" >> $GITHUB_OUTPUT
 
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
-
+  build:
+    needs: prepare
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{ fromJson(needs.prepare.outputs.matrix) }}
+      fail-fast: false
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.branch }}
+          persist-credentials: false
+          
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: 21
-
+          
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-
+        
       - name: Build with Gradle
         run: ./gradlew build
-
-      - name: Release
-        uses: marvinpinto/action-automatic-releases@latest
+        
+      - name: Get commit SHA
+        id: commit
+        run: echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+        
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
         with:
-          repo_token: '${{ secrets.GITHUB_TOKEN }}'
-          automatic_release_tag: snapshot
-          prerelease: true
-          title: Dev Build
-          files: |
-            ./build/libs/*.jar
+          name: build-${{ matrix.branch }}-${{ steps.commit.outputs.sha }}
+          path: ./build/libs/*.jar
+          retention-days: 20
+          if-no-files-found: error
