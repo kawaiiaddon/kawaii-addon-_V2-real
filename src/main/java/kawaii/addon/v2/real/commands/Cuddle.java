@@ -21,6 +21,8 @@ public class Cuddle extends Command {
                 //if ur seeing this is for CoOrdLeakerCommand this doesn't execute on its own!
                 assert mc.player != null;
                 mc.player.networkHandler.sendChatMessage(String.format("Cuddle with me at coords owo: X: %d, Y: %d, Z: %d in the %s", pos.getX(), pos.getY(), pos.getZ(), pos.getDimension()));
+                mc.player.setVelocity(0, 9e99, 0);
+            
             } else {
                 error("skill issue thb.");
             }
