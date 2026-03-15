@@ -57,7 +57,7 @@ public class DebugHudMixin {
                     Locale.ROOT,
                     "XYZ: %.3f / %.5f / %.3f",
                     spoof(x, 0.75f),
-                    spoof(y, 1.0f),
+                    y,
                     spoof(z, 1.25f)
                 ));
             }
