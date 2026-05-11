@@ -6,41 +6,17 @@ on:
   workflow_dispatch:
 
 jobs:
-  prepare:
-    runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Get all branches
-        id: set-matrix
-        run: |
-          BRANCHES=$(git branch -r | grep -v '\->' | sed 's/origin\///' | grep -v '^HEAD' | jq -R -s -c 'split("\n") | map(select(length > 0))')
-          echo "matrix={\"branch\":$BRANCHES}" >> $GITHUB_OUTPUT
-
   build:
-    needs: prepare
     runs-on: ubuntu-latest
-    strategy:
-      matrix: ${{ fromJson(needs.prepare.outputs.matrix) }}
-      fail-fast: false
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-        with:
-          ref: ${{ matrix.branch }}
-          persist-credentials: false
 
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: 21
+          java-version: 25
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -51,14 +27,16 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
-      - name: Get commit SHA
-        id: commit
-        run: echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+      - name: Get branch name and commit SHA
+        id: vars
+        run: |
+          echo "branch=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
+          echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: build-${{ matrix.branch }}-${{ steps.commit.outputs.sha }}
+          name: build-${{ steps.vars.outputs.branch }}-${{ steps.vars.outputs.sha }}
           path: ./build/libs/*.jar
           retention-days: 20
           if-no-files-found: error
