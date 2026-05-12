@@ -9,10 +9,19 @@
        alt="Discord" />
 </a>
 
+<a href="https://github.com/kawaiiaddon/kawaii-addon-_V2-real/releases">
+    <img src="https://img.shields.io/github/downloads/turtlegamerw/kawaii-addon-_V2-real/total?color=green&label=Total%20Downloads" alt="Total Downloads" />
+</a>
+
+<a href="https://github.com/turtlegamerw/kawaii-addon-_V2-real/blob/master/LICENSE">
+    <img src="https://img.shields.io/github/license/turtlegamerw/kawaii-addon-_V2-real?color=blue" alt="License" />
+</a>
 
 
 
-A **Meteor Client addon** for Minecraft 1.21.8 that displays **catgirl images** + more, adding some kawaii flair to your client!  **(meme addon)** ✨
+A **Meteor Client addon** for Minecraft 26.1.2 that displays **catgirl images** + more, adding some kawaii flair to your client!  **(meme addon)** ✨
+
+**Only Available in older versions**: 1.21.4, 1.21.5, 1.21.7, 1.21.8, 1.21.10 & 1.21.11
 
 ---
 

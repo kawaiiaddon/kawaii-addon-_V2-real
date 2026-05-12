@@ -1,0 +1,32 @@
+{
+  "description": "A Meteor Client addon that displays catgirl images + more, adding some kawaii flair to your client! (meme addon)",
+  "tags": [
+    "Misc",
+    "Utility",
+    "Theme",
+    "Render",
+    "fun"
+  ],
+  "supported_versions": [
+    "1.21.4",
+    "1.21.5",
+    "1.21.7",
+    "1.21.8",
+    "1.21.10",
+    "1.21.11",
+    "26.1.2"
+  ],
+  "discord": "https://discord.gg/cuUbBurC54",
+  "homepage": "https://kawaiiaddon.nl/",
+  "feature_directories": {
+    "commands": [
+      "commands"
+    ],
+    "modules": [
+      "modules"
+    ],
+    "hud_elements": [
+      "hud"
+    ]
+  }
+}
