@@ -56,6 +56,7 @@ public abstract class AbstractClientPlayerEntityMixin extends Entity {
             case vape -> Identifier.fromNamespaceAndPath("kawaii-addon", "cape/vape.png");
             case RETRO -> Identifier.fromNamespaceAndPath("kawaii-addon", "cape/retro.png");
             case h0rny -> Identifier.fromNamespaceAndPath("kawaii-addon", "cape/h0rny.png");
+            case astolfo -> Identifier.fromNamespaceAndPath("kawaii-addon", "cape/astolfo.png");
             default -> null;
         };
 

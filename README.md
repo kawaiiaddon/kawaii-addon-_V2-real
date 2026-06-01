@@ -17,6 +17,15 @@
     <img src="https://img.shields.io/github/license/turtlegamerw/kawaii-addon-_V2-real?color=blue" alt="License" />
 </a>
 
+<a href="https://minecraft.wiki/w/Java_Edition_version_history">
+<img src="https://img.shields.io/badge/MC%20Version-26.1.2-orange" alt="Minecraft Version">
+</a>
+
+<a href="https://meteoraddons.com/">
+    <img src="https://img.shields.io/badge/Verified%20Addon-Yes-green" alt="Verified Addon">
+</a>
+
+
 
 
 A **Meteor Client addon** for Minecraft 26.1.2 that displays **catgirl images** + more, adding some kawaii flair to your client!  **(meme addon)** ✨
