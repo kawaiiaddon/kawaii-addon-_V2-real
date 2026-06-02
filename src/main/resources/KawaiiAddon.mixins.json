@@ -5,7 +5,9 @@
   "client": [
     "AbstractClientPlayerEntityMixin",
     "DebugHudMixin",
-    "MapRendererMixin"
+    "MapRendererMixin",
+    
+    "FriendsMixin"
   ],
   "injectors": {
     "defaultRequire": 1

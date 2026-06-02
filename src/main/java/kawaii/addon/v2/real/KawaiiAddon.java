@@ -41,6 +41,7 @@ public class KawaiiAddon extends MeteorAddon {
         Commands.add(new CrashOut());
         Commands.add(new Dupe());
         Commands.add(new Rat());
+        Commands.add(new FriendSync());
 
         // HUD
         Hud.get().register(Cat.INFO);

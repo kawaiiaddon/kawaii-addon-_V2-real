@@ -7,7 +7,6 @@ import meteordevelopment.meteorclient.commands.Command;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientSuggestionProvider;
-import net.minecraft.commands.SharedSuggestionProvider;
 
 public class Cuddle extends Command {
     public Cuddle() {
