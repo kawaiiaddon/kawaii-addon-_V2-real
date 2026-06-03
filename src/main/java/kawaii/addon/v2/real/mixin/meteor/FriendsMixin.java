@@ -1,4 +1,4 @@
-package kawaii.addon.v2.real.mixin;
+package kawaii.addon.v2.real.mixin.meteor;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

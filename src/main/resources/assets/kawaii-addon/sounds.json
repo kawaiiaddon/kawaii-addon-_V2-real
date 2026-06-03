@@ -52,5 +52,17 @@
     "sounds": [
       "kawaii-addon:sad_instrument"
     ]
+  },
+  "your_taking_too_long_event": {
+    "category": "player",
+    "sounds": [
+      "kawaii-addon:taking_too_long"
+    ]
+  },
+  "your_long_event": {
+    "category": "player",
+    "sounds": [
+      "kawaii-addon:your_long"
+    ]
   }
 }

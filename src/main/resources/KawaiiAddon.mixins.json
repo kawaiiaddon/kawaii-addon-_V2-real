@@ -6,8 +6,8 @@
     "AbstractClientPlayerEntityMixin",
     "DebugHudMixin",
     "MapRendererMixin",
-    
-    "FriendsMixin"
+
+    "meteor.FriendsMixin"
   ],
   "injectors": {
     "defaultRequire": 1
