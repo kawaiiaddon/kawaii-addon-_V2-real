@@ -1,3 +1,5 @@
+@file:Suppress("MISSING_DEPENDENCY_SUPERCLASS_IN_TYPE_ARGUMENT", "MISSING_DEPENDENCY_SUPERCLASS_WARNING")
+
 plugins {
     alias(libs.plugins.fabric.loom)
 }
@@ -63,6 +65,7 @@ tasks {
         from("LICENSE") {
             rename { "${it}_${inputs.properties["archivesName"]}" }
         }
+        entryCompression = ZipEntryCompression.DEFLATED
     }
 
     withType<JavaCompile>().configureEach {
