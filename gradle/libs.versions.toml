@@ -13,8 +13,6 @@ loom = "1.16-SNAPSHOT"
 # Meteor (https://github.com/MeteorDevelopment/meteor-client/)
 meteor = "26.1.2-SNAPSHOT"
 
-# Mods
-
 [libraries]
 # Fabric base
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
@@ -23,8 +21,6 @@ fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-l
 
 # Meteor client
 meteor-client = { module = "meteordevelopment:meteor-client", version.ref = "meteor" }
-
-# Mods
 
 [plugins]
 fabric-loom = { id = "net.fabricmc.fabric-loom", version.ref = "loom" }

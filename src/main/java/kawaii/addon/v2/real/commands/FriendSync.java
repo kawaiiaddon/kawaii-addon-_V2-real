@@ -57,15 +57,5 @@ public class FriendSync extends Command {
 
                     return SINGLE_SUCCESS;
                 }));
-
-
-        // List friends
-        builder.then(literal("list").executes(context -> {
-                info("--- Friends ((highlight)%s(default)) ---", Friends.get().count());
-                Friends.get().forEach(friend -> ChatUtils.info("(highlight)%s".formatted(friend.getName())));
-                return SINGLE_SUCCESS;
-            })
-        );}
+    }
 }
-
-

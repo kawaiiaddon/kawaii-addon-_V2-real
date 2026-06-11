@@ -48,9 +48,23 @@ public class PlayerSeekerHud extends HudElement {
         .build()
     );
 
+    private final Setting<SettingColor> outlineColor = sgColors.add(new ColorSetting.Builder()
+        .name("outline-color")
+        .description("Color of the outline.")
+        .defaultValue(new SettingColor(255, 255, 255, 255))
+        .build()
+    );
+
     private final Setting<Boolean> backgroundEnabled = sgGeneral.add(new BoolSetting.Builder()
         .name("background")
         .description("Shows a background behind the text.")
+        .defaultValue(true)
+        .build()
+    );
+
+    private final Setting<Boolean> outlineEnabled = sgGeneral.add(new BoolSetting.Builder()
+        .name("outline")
+        .description("Shows an outline around the HUD element.")
         .defaultValue(true)
         .build()
     );
@@ -75,6 +89,9 @@ public class PlayerSeekerHud extends HudElement {
 
             if (backgroundEnabled.get()) {
                 renderer.quad(x, y, width, height, backgroundColor.get());
+            }
+            if (outlineEnabled.get()) {
+                renderOutline(renderer, x, y, width, height);
             }
             renderer.text(noPlayersText, x, y, Color.WHITE, false);
             setSize(width, height);
@@ -104,6 +121,9 @@ public class PlayerSeekerHud extends HudElement {
         if (backgroundEnabled.get()) {
             renderer.quad(x, y, maxWidth, totalHeight, backgroundColor.get());
         }
+        if (outlineEnabled.get()) {
+            renderOutline(renderer, x, y, maxWidth, totalHeight);
+        }
 
         for (Player player : players) {
             String name = player.getGameProfile().name();
@@ -123,5 +143,13 @@ public class PlayerSeekerHud extends HudElement {
         }
 
         setSize(maxWidth, totalHeight);
+    }
+
+    private void renderOutline(HudRenderer renderer, double x, double y, double width, double height) {
+        Color outline = outlineColor.get();
+        renderer.quad(x, y, width, 1, outline);
+        renderer.quad(x, y + height - 1, width, 1, outline);
+        renderer.quad(x, y, 1, height, outline);
+        renderer.quad(x + width - 1, y, 1, height, outline);
     }
 }
