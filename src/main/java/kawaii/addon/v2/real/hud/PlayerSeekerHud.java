@@ -3,6 +3,7 @@ package kawaii.addon.v2.real.hud;
 import kawaii.addon.v2.real.KawaiiAddon;
 import meteordevelopment.meteorclient.settings.BoolSetting;
 import meteordevelopment.meteorclient.settings.ColorSetting;
+import meteordevelopment.meteorclient.settings.EnumSetting;
 import meteordevelopment.meteorclient.settings.Setting;
 import meteordevelopment.meteorclient.settings.SettingGroup;
 import meteordevelopment.meteorclient.systems.friends.Friends;
@@ -24,8 +25,21 @@ public class PlayerSeekerHud extends HudElement {
 
     public static final HudElementInfo<PlayerSeekerHud> INFO = new HudElementInfo<>(KawaiiAddon.HUD_GROUP, "PlayerSeeker", "Displays info about nearby players.", PlayerSeekerHud::new);
 
+    public enum DisplayMode {
+        Coords,
+        Distance,
+        Both
+    }
+
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
     private final SettingGroup sgColors = settings.createGroup("Colors");
+
+    private final Setting<DisplayMode> displayMode = sgGeneral.add(new EnumSetting.Builder<DisplayMode>()
+        .name("display-mode")
+        .description("What information to display for each player.")
+        .defaultValue(DisplayMode.Both)
+        .build()
+    );
 
     private final Setting<SettingColor> friendColor = sgColors.add(new ColorSetting.Builder()
         .name("friend-color")
@@ -104,15 +118,7 @@ public class PlayerSeekerHud extends HudElement {
         Vec3 localPos = mc.player.position();
 
         for (Player player : players) {
-            String name = player.getGameProfile().name();
-            Vec3 targetPos = player.position();
-
-            int distance = (int) localPos.distanceTo(targetPos);
-            int pX = (int) targetPos.x;
-            int pY = (int) targetPos.y;
-            int pZ = (int) targetPos.z;
-
-            String text = String.format("%s [%d, %d, %d] (%d blocks)", name, pX, pY, pZ, distance);
+            String text = getPlayerText(player, localPos);
             maxWidth = Math.max(maxWidth, renderer.textWidth(text, false));
         }
 
@@ -126,23 +132,39 @@ public class PlayerSeekerHud extends HudElement {
         }
 
         for (Player player : players) {
-            String name = player.getGameProfile().name();
-            Vec3 targetPos = player.position();
-
-            int distance = (int) localPos.distanceTo(targetPos);
-            int pX = (int) targetPos.x;
-            int pY = (int) targetPos.y;
-            int pZ = (int) targetPos.z;
-
-            String text = String.format("%s [%d, %d, %d] (%d blocks)", name, pX, pY, pZ, distance);
-
+            String text = getPlayerText(player, localPos);
             Color textColor = Friends.get().isFriend(player) ? friendColor.get() : playerColor.get();
-
             renderer.text(text, x, currentY, textColor, false);
             currentY += renderer.textHeight(false) + 2;
         }
 
         setSize(maxWidth, totalHeight);
+    }
+
+    private String getPlayerText(Player player, Vec3 localPos) {
+        String name = player.getGameProfile().name();
+        Vec3 targetPos = player.position();
+
+        switch (displayMode.get()) {
+            case Coords: {
+                int pX = (int) targetPos.x;
+                int pY = (int) targetPos.y;
+                int pZ = (int) targetPos.z;
+                return String.format("%s [%d, %d, %d]", name, pX, pY, pZ);
+            }
+            case Distance: {
+                int distance = (int) localPos.distanceTo(targetPos);
+                return String.format("%s (%d blocks)", name, distance);
+            }
+            case Both:
+            default: {
+                int pX = (int) targetPos.x;
+                int pY = (int) targetPos.y;
+                int pZ = (int) targetPos.z;
+                int distance = (int) localPos.distanceTo(targetPos);
+                return String.format("%s [%d, %d, %d] (%d blocks)", name, pX, pY, pZ, distance);
+            }
+        }
     }
 
     private void renderOutline(HudRenderer renderer, double x, double y, double width, double height) {

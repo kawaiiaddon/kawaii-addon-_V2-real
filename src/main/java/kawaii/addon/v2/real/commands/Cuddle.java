@@ -17,7 +17,7 @@ public class Cuddle extends Command {
     public void build(LiteralArgumentBuilder<ClientSuggestionProvider> builder) {
         builder.executes(_ -> {
             Minecraft client = Minecraft.getInstance();
-            PlayerPosition pos = new PlayerPosition(mc);
+            PlayerPosition pos = new PlayerPosition();
 
             if (client.player != null) {
                 //if ur seeing this is for CoOrdLeakerCommand this doesn't execute on its own!

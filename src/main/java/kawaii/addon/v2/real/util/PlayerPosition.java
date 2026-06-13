@@ -1,14 +1,8 @@
 package kawaii.addon.v2.real.util;
 
-import net.minecraft.client.Minecraft;
+import static meteordevelopment.meteorclient.MeteorClient.mc;
 
 public class PlayerPosition {
-
-    private final Minecraft mc;
-
-    public PlayerPosition(Minecraft mc) {
-        this.mc = mc;
-    }
 
     private int floor(double value) {
         return (int) Math.floor(value);
