@@ -1,13 +1,11 @@
 package kawaii.addon.v2.real.util;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.protocol.game.ServerboundSetCarriedItemPacket;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import static meteordevelopment.meteorclient.MeteorClient.mc;
 
 public class SwapUtil {
-
-    private static final Minecraft mc = Minecraft.getInstance();
 
     private static int savedSlot = -1;
 

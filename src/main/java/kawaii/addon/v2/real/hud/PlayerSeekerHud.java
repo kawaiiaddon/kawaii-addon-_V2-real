@@ -147,9 +147,9 @@ public class PlayerSeekerHud extends HudElement {
 
         switch (displayMode.get()) {
             case Coords: {
-                int pX = (int) targetPos.x;
-                int pY = (int) targetPos.y;
-                int pZ = (int) targetPos.z;
+                int pX = (int) Math.round(targetPos.x);
+                int pY = (int) Math.round(targetPos.y);
+                int pZ = (int) Math.round(targetPos.z);
                 return String.format("%s [%d, %d, %d]", name, pX, pY, pZ);
             }
             case Distance: {
@@ -158,9 +158,9 @@ public class PlayerSeekerHud extends HudElement {
             }
             case Both:
             default: {
-                int pX = (int) targetPos.x;
-                int pY = (int) targetPos.y;
-                int pZ = (int) targetPos.z;
+                int pX = (int) Math.round(targetPos.x);
+                int pY = (int) Math.round(targetPos.y);
+                int pZ = (int) Math.round(targetPos.z);
                 int distance = (int) localPos.distanceTo(targetPos);
                 return String.format("%s [%d, %d, %d] (%d blocks)", name, pX, pY, pZ, distance);
             }
