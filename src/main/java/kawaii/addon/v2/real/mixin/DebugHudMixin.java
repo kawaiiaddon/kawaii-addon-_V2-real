@@ -1,8 +1,10 @@
 package kawaii.addon.v2.real.mixin;
 
+import kawaii.addon.v2.real.modules.MapCensor;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.DebugScreenOverlay;
+import net.minecraft.resources.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -10,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import kawaii.addon.v2.real.modules.CoordSpoofer;
+import kawaii.addon.v2.real.modules.CoordSpoofer.*;
 import kawaii.addon.v2.real.util.MathSecret;
 
 import java.util.List;
@@ -25,7 +28,18 @@ public class DebugHudMixin {
         if (mod == null) return num;
 
         int seed = mod.seed.get();
-        float offset = MathSecret.transform(seed, multiplier);
+
+        CoordSpoofer spoofer = Modules.get().get(CoordSpoofer.class);
+
+        float offset = 0;
+
+        if (spoofer != null) {
+            if (spoofer.SpoofMode.get() == CoordSpoofer.mode.Static) {
+                offset = MathSecret.transform(seed, multiplier);
+            } else if (spoofer.SpoofMode.get() == CoordSpoofer.mode.Random) {
+                offset = MathSecret.RandomTransform(seed);
+            }
+        }
 
         return seed >= 0 ? num + offset : num - offset;
     }
