@@ -34,16 +34,18 @@ public class KawaiiAddon extends MeteorAddon {
         Modules.get().add(new AntiWeb());
         Modules.get().add(new SwordSwap());
         Modules.get().add(new OnDeathSFX());
-        Modules.get().add(new PacketFly());
 
         // Commands
         Commands.add(new Cuddle());
         Commands.add(new CrashOut());
         Commands.add(new Dupe());
+        Commands.add(new Rat());
+        Commands.add(new FriendSync());
 
         // HUD
         Hud.get().register(Cat.INFO);
         Hud.get().register(WaterMark.INFO);
+        Hud.get().register(PlayerSeekerHud.INFO);
     }
 
     @Override

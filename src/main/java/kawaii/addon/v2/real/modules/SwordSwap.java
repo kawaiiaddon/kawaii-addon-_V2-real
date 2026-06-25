@@ -124,14 +124,16 @@ public class SwordSwap extends Module {
         if (swapped && currentSlot != lastSlot) {
             restore();
             swapped = false;
-            lastSlot = currentSlot;
-            return;
         }
 
         if (!swapped) {
             lastSlot = currentSlot;
-            SwapUtil.swapSilent(swordSlot);
-            swapped = true;
+            if (currentSlot != swordSlot) {
+                SwapUtil.swapSilent(swordSlot);
+                swapped = true;
+            } else {
+                swapped = true;
+            }
         }
     }
 

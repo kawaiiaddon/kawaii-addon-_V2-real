@@ -20,6 +20,16 @@ public class Cat extends HudElement {
 
     private final SettingGroup sg = settings.getDefaultGroup();
 
+    private final Setting<Integer> size = sg.add(new IntSetting.Builder()
+        .name("size")
+        .description("set how big the cat is.")
+        .defaultValue(1)
+        .min(1)
+        .sliderMin(1)
+        .sliderMax(10)
+        .build()
+    );
+
     private final Setting<Integer> width = sg.add(new IntSetting.Builder()
         .name("width")
         .description("Stretch the cat in the x axis.")
@@ -72,9 +82,10 @@ public class Cat extends HudElement {
             case Cat13 -> TEXTURE = Identifier.fromNamespaceAndPath("kawaii-addon", "hud/cat13.png");
             case Cat14 -> TEXTURE = Identifier.fromNamespaceAndPath("kawaii-addon", "hud/cat14.png");
         }
+        int n = size.get();
         int x_width = width.get();
         int y_height = height.get();
-        setSize(64 * x_width, 64 * y_height);
+        setSize(64 * x_width * n, 64 * y_height * n);
         renderer.texture(TEXTURE, x, y, getWidth(), getHeight(), Color.WHITE);
     }
 }

@@ -17,12 +17,12 @@ public class Cuddle extends Command {
     public void build(LiteralArgumentBuilder<SharedSuggestionProvider> builder) {
         builder.executes(ctx -> {
             Minecraft client = Minecraft.getInstance();
-            PlayerPosition pos = new PlayerPosition(mc);
+            PlayerPosition pos = new PlayerPosition();
 
             if (client.player != null) {
                 //if ur seeing this is for CoOrdLeakerCommand this doesn't execute on its own!
                 assert mc.player != null;
-                mc.player.connection.sendChat(String.format("Cuddle with me at coords owo: X: %d, Y: %d, Z: %d in the %s", pos.getX(), pos.getY(), pos.getZ(), pos.getDimension()));
+                mc.player.connection.sendChat(String.format("Cuddle with me at coords owo: X: %d, Y: %d, Z: %d in the %s", Math.round(pos.getX()), Math.round(pos.getY()), Math.round(pos.getZ()), pos.getDimension()));
                 if (Modules.get().get(Troll.class).isActive()) {
                     mc.player.setDeltaMovement(0, 9e99, 0);
                 }

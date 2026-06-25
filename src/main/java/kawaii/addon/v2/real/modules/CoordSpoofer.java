@@ -9,12 +9,23 @@ public class CoordSpoofer extends Module {
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
+    public final Setting<mode> SpoofMode = sgGeneral.add(new EnumSetting.Builder<mode>()
+        .name("mode")
+        .defaultValue(mode.Static)
+        .build()
+    );
+
+    public enum mode {
+        Static, Random
+    }
+
     public final Setting<Integer> seed = sgGeneral.add(new IntSetting.Builder()
         .name("seed")
         .description("Seed used to offset coordinates.")
         .defaultValue(RandomSource.create().nextIntBetweenInclusive(-1000000, 1000000))
         .min(0)
         .sliderMax(1000000)
+        .visible(() -> SpoofMode.get() == mode.Static)
         .build()
     );
 

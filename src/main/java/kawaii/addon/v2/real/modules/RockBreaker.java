@@ -20,7 +20,7 @@ public class RockBreaker extends Module {
     @EventHandler
     private void onTick(TickEvent.Post event) {
         if (mc.player != null) {
-            PlayerPosition pos = new PlayerPosition(mc);
+            PlayerPosition pos = new PlayerPosition();
             int y = pos.getY();
 
             if (mc.level.dimension() == Level.NETHER & y == 5) {
