@@ -1,10 +1,11 @@
+@file:Suppress("DEPRECATION")
+
 plugins {
     id("fabric-loom") version "1.14-SNAPSHOT"
 }
 
 base {
     archivesName = properties["archives_base_name"] as String
-    version = properties["mod_version"] as String
     group = properties["maven_group"] as String
 }
 
@@ -44,6 +45,10 @@ tasks {
         filesMatching("fabric.mod.json") {
             expand(propertyMap)
         }
+    }
+
+    remapJar {
+        archiveBaseName.set("${project.base.archivesName.get()}-${project.property("mod_version")}-${project.property("minecraft_version")}")
     }
 
     jar {
