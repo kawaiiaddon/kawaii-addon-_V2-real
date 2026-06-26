@@ -1,4 +1,4 @@
-@file:Suppress("MISSING_DEPENDENCY_SUPERCLASS_IN_TYPE_ARGUMENT", "MISSING_DEPENDENCY_SUPERCLASS_WARNING")
+@file:Suppress("MISSING_DEPENDENCY_SUPERCLASS_IN_TYPE_ARGUMENT", "MISSING_DEPENDENCY_SUPERCLASS_WARNING", "DEPRECATION")
 
 plugins {
     alias(libs.plugins.fabric.loom)
@@ -6,7 +6,7 @@ plugins {
 
 base {
     archivesName = properties["archives_base_name"] as String
-    version = libs.versions.mod.version.get()
+    //version = libs.versions.mod.version.get()
     group = properties["maven_group"] as String
 }
 
@@ -60,6 +60,8 @@ tasks {
     }
 
     jar {
+        archiveBaseName.set("${project.base.archivesName.get()}-${libs.versions.mod.version.get()}-${(libs.versions.minecraft.get())}")
+
         inputs.property("archivesName", project.base.archivesName.get())
 
         from("LICENSE") {
