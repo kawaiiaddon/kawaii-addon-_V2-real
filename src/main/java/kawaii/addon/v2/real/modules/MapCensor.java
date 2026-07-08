@@ -3,7 +3,7 @@ package kawaii.addon.v2.real.modules;
 import kawaii.addon.v2.real.KawaiiAddon;
 import meteordevelopment.meteorclient.settings.*;
 import meteordevelopment.meteorclient.systems.modules.Module;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public class MapCensor extends Module {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -23,14 +23,14 @@ public class MapCensor extends Module {
         Rem, rip, punkalopi, pileton, catgirl, smoke
     }
 
-    public Identifier getTexture() {
+    public ResourceLocation getTexture() {
         return switch (mode.get()) {
-            case catgirl -> Identifier.of("kawaii-addon", "censor/catgirl.png");
-            case pileton -> Identifier.of("kawaii-addon", "censor/pileton.png");
-            case punkalopi -> Identifier.of("kawaii-addon", "censor/punkalopi.png");
-            case rip -> Identifier.of("kawaii-addon", "censor/rip.png");
-            case Rem -> Identifier.of("kawaii-addon", "censor/rem.png");
-            case smoke -> Identifier.of("kawaii-addon", "censor/smoke.png");
+            case catgirl -> ResourceLocation.fromNamespaceAndPath("kawaii-addon", "censor/catgirl.png");
+            case pileton -> ResourceLocation.fromNamespaceAndPath("kawaii-addon", "censor/pileton.png");
+            case punkalopi -> ResourceLocation.fromNamespaceAndPath("kawaii-addon", "censor/punkalopi.png");
+            case rip -> ResourceLocation.fromNamespaceAndPath("kawaii-addon", "censor/rip.png");
+            case Rem -> ResourceLocation.fromNamespaceAndPath("kawaii-addon", "censor/rem.png");
+            case smoke -> ResourceLocation.fromNamespaceAndPath("kawaii-addon", "censor/smoke.png");
         };
     }
 }

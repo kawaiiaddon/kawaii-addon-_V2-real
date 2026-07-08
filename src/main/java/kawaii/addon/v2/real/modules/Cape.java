@@ -22,6 +22,6 @@ public class Cape extends Module {
     private final SettingGroup sgCapes = settings.getDefaultGroup();
 
     public enum Capes{
-        kawaii, cat, idk, turtle, hutao, vape, RETRO, h0rny
+        kawaii, cat, idk, turtle, hutao, vape, RETRO, h0rny, astolfo
     }
 }

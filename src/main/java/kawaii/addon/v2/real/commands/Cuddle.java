@@ -2,8 +2,8 @@ package kawaii.addon.v2.real.commands;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import meteordevelopment.meteorclient.commands.Command;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.command.CommandSource;
+import net.minecraft.client.Minecraft;
+import net.minecraft.commands.SharedSuggestionProvider;
 
 public class Cuddle extends Command {
     public Cuddle() {
@@ -11,9 +11,9 @@ public class Cuddle extends Command {
     }
 
     @Override
-    public void build(LiteralArgumentBuilder<CommandSource> builder) {
+    public void build(LiteralArgumentBuilder<SharedSuggestionProvider> builder) {
         builder.executes(context -> {
-            MinecraftClient client = MinecraftClient.getInstance();
+            Minecraft client = Minecraft.getInstance();
 
             if (client.player != null) {
                 //if ur seeing this is for CoOrdLeakerCommand this doesn't execute on its own!
@@ -21,7 +21,7 @@ public class Cuddle extends Command {
                 int y = client.player.getBlockY();
                 int z = client.player.getBlockZ();
                 String message = String.format("Cuddle with me at coords owo: X: %d, Y: %d, Z: %d", x, y, z);
-                client.player.networkHandler.sendChatMessage(message);
+                client.player.connection.sendChat(message);
             } else {
                 error("skill issue thb.");
             }

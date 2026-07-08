@@ -4,7 +4,6 @@
 
 base {
     archivesName = properties["archives_base_name"] as String
-    version = properties["mod_version"] as String
     group = properties["maven_group"] as String
 }
 
@@ -23,44 +22,48 @@ repositories {
 dependencies {
     // Fabric
     minecraft("com.mojang:minecraft:${properties["minecraft_version"] as String}")
-    mappings("net.fabricmc:yarn:${properties["yarn_mappings"] as String}:v2")
+    mappings(loom.officialMojangMappings())
     modImplementation("net.fabricmc:fabric-loader:${properties["loader_version"] as String}")
 
     // Meteor
     modImplementation("meteordevelopment:meteor-client:${properties["minecraft_version"] as String}-SNAPSHOT")
 }
 
-tasks {
-    processResources {
-        val propertyMap = mapOf(
-            "version" to project.version,
-            "mc_version" to project.property("minecraft_version"),
-        )
+    tasks {
+        processResources {
+            val propertyMap = mapOf(
+                "version" to project.version,
+                "mc_version" to project.property("minecraft_version"),
+            )
 
-        inputs.properties(propertyMap)
+            inputs.properties(propertyMap)
 
-        filteringCharset = "UTF-8"
+            filteringCharset = "UTF-8"
 
-        filesMatching("fabric.mod.json") {
-            expand(propertyMap)
+            filesMatching("fabric.mod.json") {
+                expand(propertyMap)
+            }
+        }
+
+        remapJar {
+            archiveBaseName.set("${project.base.archivesName.get()}-${project.property("mod_version")}-${project.property("minecraft_version")}")
+        }
+
+        jar {
+            inputs.property("archivesName", project.base.archivesName.get())
+
+            from("LICENSE") {
+                rename { "${it}_${inputs.properties["archivesName"]}" }
+            }
+        }
+
+        java {
+        }
+
+        withType<JavaCompile> {
+            options.encoding = "UTF-8"
+            options.release = 21
+            options.compilerArgs.add("-Xlint:deprecation")
+            options.compilerArgs.add("-Xlint:unchecked")
         }
     }
-
-    jar {
-        inputs.property("archivesName", project.base.archivesName.get())
-
-        from("LICENSE") {
-            rename { "${it}_${inputs.properties["archivesName"]}" }
-        }
-    }
-
-    java {
-    }
-
-    withType<JavaCompile> {
-        options.encoding = "UTF-8"
-        options.release = 21
-        options.compilerArgs.add("-Xlint:deprecation")
-        options.compilerArgs.add("-Xlint:unchecked")
-    }
-}
