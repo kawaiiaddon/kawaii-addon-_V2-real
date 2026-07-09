@@ -5,6 +5,7 @@
   "client": [
     "AbstractClientPlayerEntityMixin",
     "DebugHudMixin",
+    "InGameHudMixin",
     "MapRendererMixin",
     "meteor.FriendsMixin"
   ],
