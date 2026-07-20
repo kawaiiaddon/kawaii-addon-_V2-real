@@ -1,3 +1,6 @@
+<img src="https://raw.githubusercontent.com/kawaiiaddon/kawaii-addon-_V2-real/refs/heads/26.x/src/main/resources/assets/kawaii-addon/icon/watermark.png"> 
+</img> 
+
 # Kawaii Addon v2 Real
 
 **Repository:** [kawaii-addon-_V2-real](https://github.com/turtlegamerw/kawaii-addon-_V2-real)
