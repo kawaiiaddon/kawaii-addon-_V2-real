@@ -23,6 +23,7 @@ public class RockBreaker extends Module {
             PlayerPosition pos = new PlayerPosition();
             int y = pos.getY();
 
+            assert mc.level != null;
             if (mc.level.dimension() == Level.NETHER & y == 5) {
                 assert client.player != null;
                 String currentPrefix = Config.get().prefix.get();

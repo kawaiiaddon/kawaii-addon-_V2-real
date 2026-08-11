@@ -105,7 +105,10 @@ public class HeadPatTurn extends Module {
         yaw += speed.get();
 
         switch (mode.get()) {
-            case Client -> mc.player.setYRot(yaw);
+            case Client -> {
+                assert mc.player != null;
+                mc.player.setYRot(yaw);
+            }
             case Server -> Rotations.rotate(yaw, 0, -15);
         }
     }

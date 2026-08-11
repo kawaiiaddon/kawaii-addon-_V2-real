@@ -464,7 +464,7 @@ public class ChinaHat extends Module {
                     if (frame.alpha <= 0) { fit.remove(); continue; }
                     float ageFraction = (float) frameIndex / Math.max(1, totalFrames - 1);
                     int alpha = (int)(frame.alpha * (1.0f - ageFraction * 0.7f) * 180);
-                    alpha = Math.max(0, Math.min(255, alpha));
+                    alpha = Math.clamp(alpha, 0, 255);
                     Color ghostColor;
                     if (afterimageRainbow.get()) {
                         float hue = afterimageRainbowSync.get()
@@ -509,10 +509,10 @@ public class ChinaHat extends Module {
                 Iterator<StarParticle> it = activeParticles.iterator();
                 while (it.hasNext()) {
                     StarParticle p = it.next();
-                    p.life -= (float)(event.tickDelta * 0.016f);
+                    p.life -= event.tickDelta * 0.016f;
                     if (p.life <= 0) { it.remove(); continue; }
                     p.px += p.vx; p.py += p.vy; p.pz += p.vz;
-                    p.rotation += rotSpeed;
+                    p.rotation += (float) rotSpeed;
 
                     if (p.vx == 0 && p.vy == 0 && p.vz == 0) {
                         double spawnAngle = random.nextDouble() * Math.PI * 2;
@@ -528,7 +528,7 @@ public class ChinaHat extends Module {
 
                     float lifeFraction = p.life / p.maxLife;
                     int alpha = particleFade.get() ? (int)(lifeFraction * 220) : 220;
-                    alpha = Math.max(0, Math.min(255, alpha));
+                    alpha = Math.clamp(alpha, 0, 255);
                     float size = particleShrink.get() ? ps * lifeFraction : ps;
 
                     Color pc;
@@ -602,7 +602,7 @@ public class ChinaHat extends Module {
                     if (frame.alpha <= 0) { fit.remove(); continue; }
                     float ageFraction = (float) frameIndex / Math.max(1, totalFrames - 1);
                     int alpha = (int)(frame.alpha * (1.0f - ageFraction * 0.7f) * 180);
-                    alpha = Math.max(0, Math.min(255, alpha));
+                    alpha = Math.clamp(alpha, 0, 255);
                     Color ghostColor;
                     if (afterimageRainbow.get()) {
                         float hue = afterimageRainbowSync.get()

@@ -4,10 +4,12 @@ plugins {
     alias(libs.plugins.fabric.loom)
 }
 
+val archivesBaseName = providers.gradleProperty("archives_base_name").get()
+val mavenGroup = providers.gradleProperty("maven_group").get()
+
 base {
-    archivesName = properties["archives_base_name"] as String
-    //version = libs.versions.mod.version.get()
-    group = properties["maven_group"] as String
+    archivesName = archivesBaseName
+    group = mavenGroup
 }
 
 repositories {
@@ -37,12 +39,24 @@ java {
 }
 
 fun toMinecraftCompat(version: String): String {
-    val match = Regex("""^(\d{2})\.([1-9]\d*)(?:\.([1-9]\d*))?$""")
-        .matchEntire(version)
-        ?: error("Invalid Minecraft version format: $version. Expected YY.D or YY.D.H")
+    val stable = Regex("""^(\d{2})\.([1-9]\d*)(?:\.(\d+))?$""")
 
-    val (year, drop, _) = match.destructured
-    return "~$year.$drop"
+    stable.matchEntire(version)?.let {
+        val (year, drop, _) = it.destructured
+        return "~$year.$drop"
+    }
+
+    val pre = Regex("""^(\d{2})\.([1-9]\d*)-pre[-.](\d+)$""")
+    pre.matchEntire(version)?.let {
+        return version.replace("-pre-", "-pre.")
+    }
+
+    val rc = Regex("""^(\d{2})\.([1-9]\d*)-rc[-.](\d+)$""")
+    rc.matchEntire(version)?.let {
+        return version.replace("-rc-", "-rc.")
+    }
+
+    return version
 }
 
 tasks {
@@ -62,10 +76,10 @@ tasks {
     jar {
         archiveBaseName.set("${project.base.archivesName.get()}-${libs.versions.mod.version.get()}-${(libs.versions.minecraft.get())}")
 
-        inputs.property("archivesName", project.base.archivesName.get())
+        inputs.property("archivesName", archivesBaseName)
 
         from("LICENSE") {
-            rename { "${it}_${inputs.properties["archivesName"]}" }
+            rename { "${it}_$archivesBaseName" }
         }
         entryCompression = ZipEntryCompression.DEFLATED
     }

@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 
 public class KawaiiAddon extends MeteorAddon {
     public static final Logger LOG = LogUtils.getLogger();
-    public static final Category CATEGORY = new Category("Kawaii", Items.PINK_DYE::getDefaultInstance);
+    public static final Category CATEGORY = new Category("Kawaii", Items.PINK_TULIP::getDefaultInstance);
     public static final HudGroup HUD_GROUP = new HudGroup("Kawaii");
 
     @Override
