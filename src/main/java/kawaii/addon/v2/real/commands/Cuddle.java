@@ -5,8 +5,8 @@ import kawaii.addon.v2.real.modules.Troll;
 import kawaii.addon.v2.real.util.PlayerPosition;
 import meteordevelopment.meteorclient.commands.Command;
 import meteordevelopment.meteorclient.systems.modules.Modules;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientSuggestionProvider;
+import java.util.Objects;
 
 public class Cuddle extends Command {
     public Cuddle() {
@@ -16,14 +16,12 @@ public class Cuddle extends Command {
     @Override
     public void build(LiteralArgumentBuilder<ClientSuggestionProvider> builder) {
         builder.executes(_ -> {
-            Minecraft client = Minecraft.getInstance();
             PlayerPosition pos = new PlayerPosition();
 
-            if (client.player != null) {
+            if (mc.player != null) {
                 //if ur seeing this is for CoOrdLeakerCommand this doesn't execute on its own!
-                assert mc.player != null;
                 mc.player.connection.sendChat(String.format("Cuddle with me at coords owo: X: %d, Y: %d, Z: %d in the %s", Math.round(pos.getX()), Math.round(pos.getY()), Math.round(pos.getZ()), pos.getDimension()));
-                if (Modules.get().get(Troll.class).isActive()) {
+                if (Objects.requireNonNull(Modules.get().get(Troll.class)).isActive()) {
                     mc.player.setDeltaMovement(0, 9e99, 0);
                 }
             } else {

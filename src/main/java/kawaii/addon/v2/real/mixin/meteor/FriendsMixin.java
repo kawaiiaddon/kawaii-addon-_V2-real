@@ -6,7 +6,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import meteordevelopment.meteorclient.systems.friends.Friend;
 import meteordevelopment.meteorclient.systems.friends.Friends;
-import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -14,6 +13,8 @@ import org.spongepowered.asm.mixin.Unique;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import static meteordevelopment.meteorclient.MeteorClient.mc;
 
 @Mixin(value = Friends.class, remap = false)
 public abstract class FriendsMixin {
@@ -24,7 +25,7 @@ public abstract class FriendsMixin {
     @Unique
     public int importFromMio() throws Exception {
         Path path = Paths.get(
-            Minecraft.getInstance().gameDirectory.getAbsolutePath(),
+            mc.getInstance().gameDirectory.getAbsolutePath(),
             "mio-fabric",
             "socials.json"
         );
@@ -55,7 +56,7 @@ public abstract class FriendsMixin {
     @Unique
     public int importFromWurst() throws Exception {
         Path path = Paths.get(
-            Minecraft.getInstance().gameDirectory.getAbsolutePath(),
+            mc.getInstance().gameDirectory.getAbsolutePath(),
             "wurst",
             "friends.json"
         );

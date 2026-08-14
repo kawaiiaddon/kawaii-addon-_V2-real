@@ -11,7 +11,6 @@ import meteordevelopment.meteorclient.utils.render.color.Color;
 import meteordevelopment.meteorclient.utils.render.color.SettingColor;
 import meteordevelopment.orbit.EventHandler;
 import net.minecraft.client.CameraType;
-import net.minecraft.client.Minecraft;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -406,7 +405,6 @@ public class ChinaHat extends Module {
 
     @EventHandler
     private void onRender3D(Render3DEvent event) {
-        Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
         if (mc.options.getCameraType() == CameraType.FIRST_PERSON) return;
 
