@@ -60,7 +60,6 @@ public class AntiWeb extends Module {
         .build()
     );
 
-    //private static final int RETRY_COOLDOWN = 10;
     private final Map<BlockPos, Integer> minedCooldowns = new HashMap<>();
     private boolean swapped = false;
 
@@ -78,7 +77,7 @@ public class AntiWeb extends Module {
     private void onTick(TickEvent.Pre event) {
         if (mc.player == null || mc.level == null || mc.getConnection() == null) return;
 
-        minedCooldowns.replaceAll((pos, ticks) -> ticks - 1);
+        minedCooldowns.replaceAll((_, ticks) -> ticks - 1);
         minedCooldowns.entrySet().removeIf(e -> e.getValue() <= 0);
 
         List<BlockPos> webs = findWebs();

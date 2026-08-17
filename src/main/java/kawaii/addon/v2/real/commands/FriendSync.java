@@ -8,6 +8,7 @@ import meteordevelopment.meteorclient.utils.player.ChatUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.multiplayer.ClientSuggestionProvider;
 
+@SuppressWarnings("CallToPrintStackTrace")
 public class FriendSync extends Command {
 
     public FriendSync() {
@@ -22,7 +23,7 @@ public class FriendSync extends Command {
                 return SINGLE_SUCCESS;
             })
             .then(argument("client", ClientArgumentType.create())
-                .suggests((context, suggestionsBuilder) -> {
+                .suggests((_, suggestionsBuilder) -> {
                     ClientArgumentType clientArg = ClientArgumentType.create();
                     for (String client : clientArg.getExamples()) {
                         suggestionsBuilder.suggest(client);
@@ -31,7 +32,7 @@ public class FriendSync extends Command {
                 })
                 .executes(context -> {
                     String client = ClientArgumentType.get(context, "client");
-                    int added = 0;
+                    int added;
 
                     try {
                         Friends friendsInstance = Friends.get();
