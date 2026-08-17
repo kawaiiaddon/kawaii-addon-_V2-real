@@ -21,29 +21,45 @@
 </a>
 
 <a href="https://minecraft.wiki/w/Java_Edition_version_history">
-<img src="https://img.shields.io/badge/MC%20Version-26.1.2-orange" alt="Minecraft Version">
+<img src="https://img.shields.io/badge/MC%20Version-26.2-orange" alt="Minecraft Version">
 </a>
 
 <a href="https://meteoraddons.com/">
     <img src="https://img.shields.io/badge/Verified%20Addon-Yes-green" alt="Verified Addon">
 </a>
 
-
-
-
 A **Meteor Client addon** for Minecraft 26.1.2 that displays **catgirl images** + more, adding some kawaii flair to your client!  **(meme addon)** ✨
 
-**Only Available in older versions**: 1.21.4, 1.21.5, 1.21.7, 1.21.8, 1.21.10 & 1.21.11
+**kinda outdated**: 1.21.4, 1.21.5, 1.21.7, 1.21.8, 1.21.10 & 1.21.11
 
 ---
 
 ## Features 🌟
 
-- Displays **catgirl images** in your HUD
-- coordleaker command for lolz a.k.a cuddle command :)
-- player spinner
-- crashout command to cool-down after getting killed
-- chinese hat (wip)
+    Hud :
+      - Cat = shows catgirl images.
+      - Watermark = shows a watermark.
+      - PlayerSeekerHud = shows info from nearby players.
+
+    Commands :
+      - FakeDupe = does nothing useful. 
+      - Cuddle = sends your coords in chat.
+      - CrashOut = closes the game.
+      - FriendSync = syncs your friends list from other clients with meteor.
+      - RatArt = sends rat ascci art in chat
+
+    Modules : 
+      - Cape = gives you a cape (client side only) 
+      - CatFacts = send cat facts in chat.
+      - ChinaHat = gives you a hat (client side only)
+      - HeadPatTurn = makes you spin. 
+      - MapCensor = censors maps.
+      - Troll = i forgot what this does.
+      - RockBreaker = break bedrock on some servers.
+      - AntiWeb = automatically break cobwebs.
+      - CoordSpoofer = spoof your coords in f3 menu. 
+      - OnDeathSFX = play a sound effect when you die (in game). 
+      - SwordSwap = test module for testing silent item swap.
 
 ---
 
