@@ -28,7 +28,7 @@
     <img src="https://img.shields.io/badge/Verified%20Addon-Yes-green" alt="Verified Addon">
 </a>
 
-A **Meteor Client addon** for Minecraft 26.1.2 that displays **catgirl images** + more, adding some kawaii flair to your client!  **(meme addon)** ✨
+A **Meteor Client addon** for Minecraft 26.2 that displays **catgirl images** + more, adding some kawaii flair to your client!  **(meme addon)** ✨
 
 **kinda outdated**: 1.21.4, 1.21.5, 1.21.7, 1.21.8, 1.21.10 & 1.21.11
 

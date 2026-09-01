@@ -35,7 +35,6 @@ public class KawaiiAddon extends MeteorAddon {
         Modules.get().add(new SwordSwap());
         Modules.get().add(new OnDeathSFX());
         Modules.get().add(new ActionBarCensor());
-        //todo: make AntiPearlPhase
 
         // Commands
         Commands.add(new Cuddle());
