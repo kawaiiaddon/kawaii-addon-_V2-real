@@ -9,18 +9,22 @@ public class PlayerPosition {
     }
 
     public int getX() {
+        assert mc.player != null;
         return floor(mc.player.getX());
     }
 
     public int getY() {
+        assert mc.player != null;
         return floor(mc.player.getY());
     }
 
     public int getZ() {
+        assert mc.player != null;
         return floor(mc.player.getZ());
     }
 
     public String getDimension() {
+        assert mc.level != null;
         return mc.level.dimension().identifier().getPath();
     }
 }

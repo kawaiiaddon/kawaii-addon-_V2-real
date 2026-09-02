@@ -15,7 +15,7 @@ public class InGameHudMixin {
     @Inject(method = "setOverlayMessage", at = @At("HEAD"), cancellable = true)
     private void kawaii$filterActionBar(Component message, boolean tinted, CallbackInfo ci) {
         ActionBarCensor module = Modules.get().get(ActionBarCensor.class);
-        if (module != null && module.shouldHide(message.getString())) {
+        if (module != null && module.isActive() && module.shouldHide(message.getString())) {
             ci.cancel();
         }
     }

@@ -6,9 +6,9 @@ import meteordevelopment.meteorclient.commands.Command;
 import meteordevelopment.meteorclient.systems.friends.Friends;
 import meteordevelopment.meteorclient.utils.player.ChatUtils;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.multiplayer.ClientSuggestionProvider;
 import net.minecraft.commands.SharedSuggestionProvider;
 
+@SuppressWarnings("CallToPrintStackTrace")
 public class FriendSync extends Command {
 
     public FriendSync() {
@@ -32,7 +32,7 @@ public class FriendSync extends Command {
                 })
                 .executes(context -> {
                     String client = ClientArgumentType.get(context, "client");
-                    int added = 0;
+                    int added;
 
                     try {
                         Friends friendsInstance = Friends.get();

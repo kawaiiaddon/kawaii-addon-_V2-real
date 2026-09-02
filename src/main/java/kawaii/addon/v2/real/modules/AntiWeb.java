@@ -114,10 +114,6 @@ public class AntiWeb extends Module {
                 mc.player.getInventory().setSelectedSlot(swordSlot);
             }
 
-            //use for older versions
-            //mc.getConnection().send(new ServerboundPlayerActionPacket(ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK, pos, face));
-            //mc.getConnection().send(new ServerboundPlayerActionPacket(ServerboundPlayerActionPacket.Action.STOP_DESTROY_BLOCK, pos, face));
-
             mc.getConnection().send(new ServerboundPlayerActionPacket(
                 ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK, pos, face, 0
             ));
@@ -143,6 +139,7 @@ public class AntiWeb extends Module {
         List<BlockPos> webs = new ArrayList<>();
         double r = range.get();
 
+        assert mc.player != null;
         AABB bodyBox = mc.player.getBoundingBox().inflate(r);
         AABB headBox = new AABB(
             mc.player.getX() - r, mc.player.getEyeY() - r, mc.player.getZ() - r,
@@ -156,10 +153,14 @@ public class AntiWeb extends Module {
         );
 
         BlockPos.betweenClosedStream(bodyBox.minmax(headBox))
-            .filter(pos -> mc.level.getBlockState(pos).getBlock() == Blocks.COBWEB)
+            .filter(pos -> {
+                assert mc.level != null;
+                return mc.level.getBlockState(pos).getBlock() == Blocks.COBWEB;
+            })
             .forEach(pos -> webs.add(pos.immutable()));
 
         for (BlockPos pos : occupied) {
+            assert mc.level != null;
             if (mc.level.getBlockState(pos).getBlock() == Blocks.COBWEB && !webs.contains(pos)) {
                 webs.add(pos);
             }
@@ -179,6 +180,7 @@ public class AntiWeb extends Module {
     }
 
     private Direction getClosestFace(BlockPos pos) {
+        assert mc.player != null;
         double dx = mc.player.getX()    - (pos.getX() + 0.5);
         double dy = mc.player.getEyeY() - (pos.getY() + 0.5);
         double dz = mc.player.getZ()    - (pos.getZ() + 0.5);

@@ -8,9 +8,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
 import kawaii.addon.v2.real.modules.CoordSpoofer;
-import kawaii.addon.v2.real.modules.CoordSpoofer.*;
 import kawaii.addon.v2.real.util.MathSecret;
 
 import java.util.List;
@@ -35,33 +33,36 @@ public class DebugHudMixin {
     private float zOffset = 0;
 
     @Unique
-    private float spoof(float num, float multiplier, boolean isX) {
+    private CoordSpoofer.mode lastMode = null;
+
+    @Unique
+    private float spoof(float num, boolean isX) {
         CoordSpoofer mod = Modules.get().get(CoordSpoofer.class);
 
-        if (mod == null) return num;
+        if (mod == null || !mod.isActive()) return num;
 
         int seed = mod.seed.get();
-        CoordSpoofer spoofer = Modules.get().get(CoordSpoofer.class);
+        CoordSpoofer.mode currentMode = mod.SpoofMode.get();
 
-        if (spoofer == null) return num;
-
-        if (!offsetsCalculated || spoofer.SpoofMode.get() == CoordSpoofer.mode.Random) {
-            if (spoofer.SpoofMode.get() == CoordSpoofer.mode.Static) {
-                xOffset = MathSecret.transform(seed, 0.75f);
-                zOffset = MathSecret.transform(seed, 1.25f);
-                offsetsCalculated = true;
-            } else if (spoofer.SpoofMode.get() == CoordSpoofer.mode.Random) {
-                if (!offsetsCalculated) {
-                    xOffset = MathSecret.RandomTransform(seed);
-                    zOffset = MathSecret.RandomTransform(seed);
-                    offsetsCalculated = true;
-                    lastRealX = 0;
-                    lastRealZ = 0;
-                }
-            }
+        if (currentMode != lastMode) {
+            offsetsCalculated = false;
+            lastMode = currentMode;
         }
 
-        if (spoofer.SpoofMode.get() == CoordSpoofer.mode.Random) {
+        if (!offsetsCalculated) {
+            if (currentMode == CoordSpoofer.mode.Static) {
+                xOffset = MathSecret.transform(seed, 0.75f);
+                zOffset = MathSecret.transform(seed, 1.25f);
+            } else {
+                xOffset = MathSecret.RandomTransform(seed);
+                zOffset = MathSecret.RandomTransform(seed);
+                lastRealX = 0;
+                lastRealZ = 0;
+            }
+            offsetsCalculated = true;
+        }
+
+        if (currentMode == CoordSpoofer.mode.Random) {
             if (isX) {
                 if (num != lastRealX) {
                     lastSpoofedX = num + (seed >= 0 ? xOffset : -xOffset);
@@ -80,7 +81,6 @@ public class DebugHudMixin {
         float offset = isX ? xOffset : zOffset;
         return seed >= 0 ? num + offset : num - offset;
     }
-
     @Inject(method = "renderLines", at = @At("HEAD"))
     private void spoofCoordLines(GuiGraphics graphics, List<String> lines, boolean alignLeft, CallbackInfo ci) {
         CoordSpoofer mod = Modules.get().get(CoordSpoofer.class);
@@ -106,9 +106,9 @@ public class DebugHudMixin {
                         lines.set(i, String.format(
                             Locale.ROOT,
                             "XYZ: %.3f / %.5f / %.3f",
-                            spoof(x, 0.75f, true),
+                            spoof(x, true),
                             y,
-                            spoof(z, 1.25f, false)
+                            spoof(z, false)
                         ));
                     } catch (NumberFormatException ignored) {}
                 }

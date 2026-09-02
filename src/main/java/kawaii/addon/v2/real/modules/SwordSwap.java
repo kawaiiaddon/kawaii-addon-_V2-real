@@ -14,6 +14,8 @@ import net.minecraft.network.protocol.game.ServerboundUseItemOnPacket;
 import net.minecraft.network.protocol.game.ServerboundUseItemPacket;
 import net.minecraft.tags.ItemTags;
 
+import java.util.Objects;
+
 public class SwordSwap extends Module {
 
     public enum SwapMode {
@@ -94,7 +96,7 @@ public class SwordSwap extends Module {
 
         if (currentSlot != lastSlot) {
             if (useTicks == 0) {
-                mc.getConnection().send(new ServerboundSetCarriedItemPacket(swordSlot));
+                Objects.requireNonNull(mc.getConnection()).send(new ServerboundSetCarriedItemPacket(swordSlot));
             }
             lastSlot = currentSlot;
         }
