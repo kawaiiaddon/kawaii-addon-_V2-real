@@ -4,8 +4,8 @@
   "compatibilityLevel": "JAVA_21",
   "client": [
     "AbstractClientPlayerEntityMixin",
+    "ClientPacketListenerMixin",
     "DebugHudMixin",
-    "InGameHudMixin",
     "MapRendererMixin",
     "meteor.FriendsMixin"
   ],
