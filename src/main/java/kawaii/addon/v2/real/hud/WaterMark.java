@@ -8,12 +8,12 @@ import meteordevelopment.meteorclient.systems.hud.HudElement;
 import meteordevelopment.meteorclient.systems.hud.HudElementInfo;
 import meteordevelopment.meteorclient.systems.hud.HudRenderer;
 import meteordevelopment.meteorclient.utils.render.color.Color;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public class WaterMark extends HudElement {
 
     public static final HudElementInfo<WaterMark> INFO = new HudElementInfo<>(KawaiiAddon.HUD_GROUP, "WaterMark", "Displays a WaterMark.", WaterMark::new);
-    public static final Identifier TEXTURE = Identifier.of("kawaii-addon", "/icon/watermark.png");
+    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("kawaii-addon", "/icon/watermark.png");
 
     public WaterMark() {
         super(INFO);

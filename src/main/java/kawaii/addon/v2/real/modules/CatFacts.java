@@ -52,7 +52,7 @@ public class CatFacts extends Module {
                     String fact = jsonObject.get("fact").getAsString();
                     mc.execute(() -> {
                         if (mc.player != null) {
-                            mc.player.networkHandler.sendChatMessage(fact);
+                            mc.player.connection.sendChat(fact);
                         }
                     });
                 }

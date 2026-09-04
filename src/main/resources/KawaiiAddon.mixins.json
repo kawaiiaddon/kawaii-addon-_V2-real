@@ -4,7 +4,10 @@
   "compatibilityLevel": "JAVA_21",
   "client": [
     "AbstractClientPlayerEntityMixin",
-    "MapRendererMixin"
+    "DebugHudMixin",
+    "InGameHudMixin",
+    "MapRendererMixin",
+    "meteor.FriendsMixin"
   ],
   "injectors": {
     "defaultRequire": 1

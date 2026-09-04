@@ -19,9 +19,7 @@ public class Cape extends Module {
         super(KawaiiAddon.CATEGORY, "Capes", "Get a cape (client-side only).");
     }
 
-    private final SettingGroup sgCapes = settings.getDefaultGroup();
-
     public enum Capes{
-        kawaii, cat, idk, turtle, hutao, vape, RETRO, h0rny
+        kawaii, cat, idk, turtle, hutao, vape, RETRO, h0rny, astolfo
     }
 }

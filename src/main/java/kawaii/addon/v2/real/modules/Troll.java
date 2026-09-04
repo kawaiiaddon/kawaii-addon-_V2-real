@@ -1,76 +1,75 @@
 package kawaii.addon.v2.real.modules;
 
 import kawaii.addon.v2.real.KawaiiAddon;
+import meteordevelopment.meteorclient.events.meteor.KeyEvent;
+import meteordevelopment.meteorclient.events.meteor.MouseClickEvent;
+import meteordevelopment.meteorclient.events.meteor.MouseScrollEvent;
 import meteordevelopment.meteorclient.events.world.TickEvent;
-import meteordevelopment.meteorclient.settings.*;
 import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.orbit.EventHandler;
-import net.minecraft.client.sound.PositionedSoundInstance;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Troll extends Module {
-    private final SettingGroup sgGeneral = settings.getDefaultGroup();
-
-    private final Setting<DeathSound> deathSound = sgGeneral.add(
-        new EnumSetting.Builder<DeathSound>()
-            .name("death-sound")
-            .description("funny sounds.")
-            .defaultValue(DeathSound.FAHHH)
-            .build()
-    );
-
-    private final Setting<Double> pitch = sgGeneral.add(new DoubleSetting.Builder()
-        .name("pitch")
-        .description("set pitch.")
-        .defaultValue(1.0)
-        .min(0.5)
-        .sliderRange(0.5, 2.0)
-        .decimalPlaces(1)
-        .build()
-    );
-
-    private final Setting<Double> volume = sgGeneral.add(new DoubleSetting.Builder()
-        .name("volume")
-        .description("set volume.")
-        .defaultValue(0.5)
-        .min(0.1)
-        .sliderRange(0.1, 1.0)
-        .decimalPlaces(1)
-        .build()
-    );
-
-    public enum DeathSound {
-        FAHHH("kawaii-addon", "fahhh_event"),
-        VINEBOOM("kawaii-addon", "vine_boom_event"),
-        METAL_PIPE("kawaii-addon", "metal-pipe_drop_event"),;
-        public final SoundEvent sound;
-        DeathSound(String namespace, String path) {
-            Identifier id = Identifier.of(namespace, path);
-            this.sound = SoundEvent.of(id);
-        }
-    }
-
-    private boolean wasDead = false;
-
     public Troll() {
         super(KawaiiAddon.CATEGORY, "troll", "Changes some stuff. :)");
     }
 
-    @EventHandler
-    private void onTick(TickEvent.Post event) {
-        assert mc.player != null;
-        boolean dead = mc.player.isDead();
+    private int ticksSinceLastInput = 0;
+    private static final int IDLE_THRESHOLD = 2400;
 
-        if (dead && !wasDead) {
-            mc.getSoundManager().play(
-                PositionedSoundInstance.master(
-                    deathSound.get().sound,
-                    pitch.get().floatValue(),
-                    volume.get().floatValue()
-                )
-            );
+    @EventHandler
+    private void onKeyInput(KeyEvent event) {
+        ticksSinceLastInput = 0;
+    }
+
+    @EventHandler
+    private void onMouseClick(MouseClickEvent event) {
+        ticksSinceLastInput = 0;
+    }
+
+    @EventHandler
+    private void onMouseScroll(MouseScrollEvent event) {
+        ticksSinceLastInput = 0;
+    }
+
+    public enum Sound {
+        TAKING_TOO_LONG("your_taking_too_long_event"),
+        YOUR_LONG("your_long_event");
+
+        public final SoundEvent sound;
+
+        Sound(String soundEventName) {
+            ResourceLocation id = ResourceLocation.fromNamespaceAndPath("kawaii-addon", soundEventName);
+            this.sound = SoundEvent.createVariableRangeEvent(id);
         }
-        wasDead = dead;
+    }
+
+    @EventHandler
+    private void onTick(TickEvent.Pre event) {
+        if (mc.player == null) return;
+
+        ticksSinceLastInput++;
+
+        if (ticksSinceLastInput >= IDLE_THRESHOLD) {
+            if (ticksSinceLastInput == IDLE_THRESHOLD) {
+                Sound[] values = Sound.values();
+                Sound soundToPlay = values[ThreadLocalRandom.current().nextInt(values.length)];
+
+                double volume = 1.0;
+                double pitch = 1.0;
+
+                mc.getSoundManager().play(
+                    SimpleSoundInstance.forUI(
+                        soundToPlay.sound,
+                        (float) pitch,
+                        (float) volume
+                    )
+                );
+            }
+        }
     }
 }

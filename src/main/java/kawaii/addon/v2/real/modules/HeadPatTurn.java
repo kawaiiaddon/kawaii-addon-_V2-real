@@ -7,9 +7,9 @@ import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.meteorclient.utils.Utils;
 import meteordevelopment.meteorclient.utils.player.Rotations;
 import meteordevelopment.orbit.EventHandler;
-import net.minecraft.client.sound.PositionedSoundInstance;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 
 public class HeadPatTurn extends Module {
     private final SettingGroup sg = settings.getDefaultGroup();
@@ -54,13 +54,13 @@ public class HeadPatTurn extends Module {
         .build()
     );
 
-    private static final Identifier SPINNY_ID =
-        Identifier.of("kawaii-addon", "spinny_event");
+    private static final ResourceLocation SPINNY_ID =
+        ResourceLocation.fromNamespaceAndPath("kawaii-addon", "spinny_event");
     private static final SoundEvent SPINNY_SOUND =
-        SoundEvent.of(SPINNY_ID);
+        SoundEvent.createVariableRangeEvent(SPINNY_ID);
 
     private float yaw;
-    private PositionedSoundInstance spinSound;
+    private SimpleSoundInstance spinSound;
 
     public HeadPatTurn() {
         super(KawaiiAddon.CATEGORY, "HeadPatTurn", "Spins your player endlessly.");
@@ -69,7 +69,7 @@ public class HeadPatTurn extends Module {
     @Override
     public void onActivate() {
         if (mc.player == null) return;
-        yaw = mc.player.getYaw();
+        yaw = mc.player.getYRot();
         if (sound.get()) startSound();
     }
 
@@ -81,7 +81,7 @@ public class HeadPatTurn extends Module {
     private void startSound() {
         if (spinSound != null) return;
 
-        spinSound = PositionedSoundInstance.master(
+        spinSound = SimpleSoundInstance.forUI(
             SPINNY_SOUND,
             pitch.get().floatValue(),
             volume.get().floatValue()
@@ -105,7 +105,10 @@ public class HeadPatTurn extends Module {
         yaw += speed.get();
 
         switch (mode.get()) {
-            case Client -> mc.player.setYaw(yaw);
+            case Client -> {
+                assert mc.player != null;
+                mc.player.setYRot(yaw);
+            }
             case Server -> Rotations.rotate(yaw, 0, -15);
         }
     }
