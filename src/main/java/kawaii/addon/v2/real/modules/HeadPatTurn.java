@@ -11,6 +11,8 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 
+import static kawaii.addon.v2.real.util.FilePath.space;
+
 public class HeadPatTurn extends Module {
     private final SettingGroup sg = settings.getDefaultGroup();
 
@@ -55,7 +57,7 @@ public class HeadPatTurn extends Module {
     );
 
     private static final Identifier SPINNY_ID =
-        Identifier.fromNamespaceAndPath("kawaii-addon", "spinny_event");
+        Identifier.fromNamespaceAndPath(space, "spinny_event");
     private static final SoundEvent SPINNY_SOUND =
         SoundEvent.createVariableRangeEvent(SPINNY_ID);
 

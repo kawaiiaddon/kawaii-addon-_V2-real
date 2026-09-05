@@ -6,6 +6,7 @@
     "AbstractClientPlayerEntityMixin",
     "ClientPacketListenerMixin",
     "DebugHudMixin",
+    "LoadingOverlayMixin",
     "MapRendererMixin",
     "meteor.FriendsMixin"
   ],

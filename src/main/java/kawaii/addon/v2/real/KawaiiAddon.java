@@ -4,6 +4,7 @@ import kawaii.addon.v2.real.commands.*;
 import kawaii.addon.v2.real.hud.*;
 import kawaii.addon.v2.real.modules.*;
 import com.mojang.logging.LogUtils;
+import meteordevelopment.meteorclient.addons.GithubRepo;
 import meteordevelopment.meteorclient.addons.MeteorAddon;
 import meteordevelopment.meteorclient.commands.Commands;
 import meteordevelopment.meteorclient.systems.hud.Hud;
@@ -57,5 +58,10 @@ public class KawaiiAddon extends MeteorAddon {
     @Override
     public String getPackage() {
         return "kawaii.addon.v2.real";
+    }
+
+    @Override
+    public GithubRepo getRepo() {
+        return new GithubRepo("kawaiiaddon", "kawaii-addon-_V2-real");
     }
 }

@@ -10,6 +10,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static kawaii.addon.v2.real.util.FilePath.space;
+
 public class OnDeathSFX extends Module {
 
     public OnDeathSFX() {
@@ -55,14 +57,14 @@ public class OnDeathSFX extends Module {
 
 
     public enum DeathSound {
-        FAHHH("kawaii-addon", "fahhh_event"),
-        VINEBOOM("kawaii-addon", "vine_boom_event"),
-        METAL_PIPE("kawaii-addon", "metal-pipe_drop_event"),
-        ACK("kawaii-addon", "ack_event"),
-        error("kawaii-addon", "error_event"),
-        fn_death("kawaii-addon", "fn_death_event"),
-        lego_breaking("kawaii-addon", "lego_breaking_event"),
-        sad_instrument("kawaii-addon", "sad_instrument_event");
+        FAHHH(space, "fahhh_event"),
+        VINEBOOM(space, "vine_boom_event"),
+        METAL_PIPE(space, "metal-pipe_drop_event"),
+        ACK(space, "ack_event"),
+        error(space, "error_event"),
+        fn_death(space, "fn_death_event"),
+        lego_breaking(space, "lego_breaking_event"),
+        sad_instrument(space, "sad_instrument_event");
         public final SoundEvent sound;
         DeathSound(String namespace, String path) {
             Identifier id = Identifier.fromNamespaceAndPath(namespace, path);

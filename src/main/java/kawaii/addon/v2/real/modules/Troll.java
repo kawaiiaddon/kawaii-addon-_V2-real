@@ -13,6 +13,8 @@ import net.minecraft.sounds.SoundEvent;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import static kawaii.addon.v2.real.util.FilePath.space;
+
 public class Troll extends Module {
     public Troll() {
         super(KawaiiAddon.CATEGORY, "troll", "Changes some stuff. :)");
@@ -41,7 +43,7 @@ public class Troll extends Module {
         YOUR_LONG("your_long_event");
         public final SoundEvent sound;
         Sound(String soundEventName) {
-            Identifier id = Identifier.fromNamespaceAndPath("kawaii-addon", soundEventName);
+            Identifier id = Identifier.fromNamespaceAndPath(space, soundEventName);
             this.sound = SoundEvent.createVariableRangeEvent(id);
         }
     }
