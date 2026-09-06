@@ -1,6 +1,7 @@
 package kawaii.addon.v2.real.commands;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import kawaii.addon.v2.real.util.BigRatString;
 import meteordevelopment.meteorclient.commands.Command;
 import net.minecraft.client.multiplayer.ClientSuggestionProvider;
 
