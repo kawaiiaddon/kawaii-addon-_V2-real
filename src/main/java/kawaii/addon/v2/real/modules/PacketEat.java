@@ -12,6 +12,7 @@ import meteordevelopment.orbit.EventHandler;
 import net.minecraft.network.protocol.game.ServerboundUseItemPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.entity.monster.Monster;
 
 public class PacketEat extends Module {
 
@@ -87,11 +88,30 @@ public class PacketEat extends Module {
         .build()
     );
 
+    private final Setting<Integer> eatDelay = sgGeneral.add(new IntSetting.Builder()
+        .name("eat-delay")
+        .description("Delay between eating attempts in ticks.")
+        .defaultValue(2)
+        .range(0, 20)
+        .sliderRange(0, 20)
+        .build()
+    );
+
+    private final Setting<Boolean> swapBack = sgGeneral.add(new BoolSetting.Builder()
+        .name("swap-back")
+        .description("Swap back to original slot after eating.")
+        .defaultValue(true)
+        .build()
+    );
+
     private boolean isEating = false;
     private int eatingSlot = -1;
+    private int originalSlot = -1;
     private long lastCombatCheck = 0;
     private boolean inCombat = false;
     private int eatingTicks = 0;
+    private int delayTicks = 0;
+    private long lastPacketTime = 0;
 
     @Override
     public void onDeactivate() {
@@ -99,11 +119,22 @@ public class PacketEat extends Module {
             stopEating();
         }
         inCombat = false;
+        isEating = false;
+        eatingSlot = -1;
+        originalSlot = -1;
+        eatingTicks = 0;
+        delayTicks = 0;
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     private void onTick(TickEvent.Post event) {
-        if (mc.player == null || mc.level == null) return;
+        if (mc.player == null || mc.level == null || mc.getConnection() == null) return;
+
+        if (delayTicks > 0) {
+            delayTicks--;
+            return;
+        }
 
         if (pauseOnCombat.get() && System.currentTimeMillis() - lastCombatCheck > combatCheckDelay.get() * 50L) {
             inCombat = checkCombat();
@@ -124,12 +155,15 @@ public class PacketEat extends Module {
         if (isEating) {
             eatingTicks++;
 
-            if (!mc.options.keyUse.isDown()) {
-                mc.options.keyUse.setDown(true);
+            if (eatingTicks > 40) {
+                stopEating();
+                delayTicks = eatDelay.get();
+                return;
             }
 
-            if (mc.player.getFoodData().getFoodLevel() >= 20 || eatingTicks > 100) {
+            if (mc.player.getFoodData().getFoodLevel() >= 20 || !mc.player.isUsingItem()) {
                 stopEating();
+                delayTicks = eatDelay.get();
             }
         }
     }
@@ -151,16 +185,22 @@ public class PacketEat extends Module {
     }
 
     private void startEating() {
+        if (System.currentTimeMillis() - lastPacketTime < 50) return;
+
         FindItemResult food = findFood();
         if (!food.found()) return;
 
         eatingSlot = food.slot();
+        assert mc.player != null;
+        originalSlot = mc.player.getInventory().getSelectedSlot();
         eatingTicks = 0;
+        lastPacketTime = System.currentTimeMillis();
 
-        SwapUtil.swapSilent(eatingSlot);
+        if (eatingSlot != originalSlot) {
+            SwapUtil.swapSilent(eatingSlot);
+        }
 
         if (mc.getConnection() != null) {
-            assert mc.player != null;
             mc.getConnection().send(new ServerboundUseItemPacket(
                 InteractionHand.MAIN_HAND,
                 mc.player.getId(),
@@ -169,34 +209,43 @@ public class PacketEat extends Module {
             ));
         }
 
-        mc.options.keyUse.setDown(true);
         isEating = true;
     }
 
     private void stopEating() {
-        if (mc.player == null) return;
-        mc.options.keyUse.setDown(false);
+        if (mc.player == null || !isEating) {
+            isEating = false;
+            return;
+        }
+
         mc.player.stopUsingItem();
 
-        if (mc.getConnection() != null) {
-            mc.getConnection().send(new ServerboundUseItemPacket(
-                InteractionHand.MAIN_HAND,
-                mc.player.getId(),
-                mc.player.getYRot(),
-                mc.player.getXRot()
-            ));
+        if (swapBack.get() && originalSlot != -1 && originalSlot != mc.player.getInventory().getSelectedSlot()) {
+            SwapUtil.swapSilent(originalSlot);
         }
 
-        if (eatingSlot != -1) {
-            SwapUtil.swapBack();
-            eatingSlot = -1;
-        }
-
-        eatingTicks = 0;
         isEating = false;
+        eatingSlot = -1;
+        originalSlot = -1;
+        eatingTicks = 0;
     }
 
     private FindItemResult findFood() {
+        if (eatEnchantedGoldenApple.get()) {
+            FindItemResult enchantedApple = InvUtils.findInHotbar(itemStack ->
+                itemStack.getItem() == Items.ENCHANTED_GOLDEN_APPLE);
+            if (enchantedApple.found()) return enchantedApple;
+        }
+
+        if (eatGoldenApple.get()) {
+            FindItemResult goldenApple = InvUtils.findInHotbar(itemStack ->
+                itemStack.getItem() == Items.GOLDEN_APPLE);
+            if (goldenApple.found()) return goldenApple;
+        }
+
+        FindItemResult hotbarFood = InvUtils.findInHotbar(Utils::isFood);
+        if (hotbarFood.found()) return hotbarFood;
+
         if (eatEnchantedGoldenApple.get()) {
             FindItemResult enchantedApple = InvUtils.find(itemStack ->
                 itemStack.getItem() == Items.ENCHANTED_GOLDEN_APPLE);
@@ -213,12 +262,21 @@ public class PacketEat extends Module {
     }
 
     private boolean checkCombat() {
-        if (mc.player == null) return false;
+        if (mc.player == null || mc.level == null) return false;
 
         long lastDamageTime = mc.player.getLastHurtByMobTimestamp();
-        assert mc.level != null;
         long currentTime = mc.level.getGameTime();
 
-        return currentTime - lastDamageTime < 100;
+        if (currentTime - lastDamageTime < 100) {
+            return true;
+        }
+
+        for (net.minecraft.world.entity.Entity entity : mc.level.entitiesForRendering()) {
+            if (entity instanceof Monster && entity.distanceTo(mc.player) < 8.0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

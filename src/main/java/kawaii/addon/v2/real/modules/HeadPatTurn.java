@@ -98,6 +98,7 @@ public class HeadPatTurn extends Module {
         }
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     private void onTick(TickEvent.Pre event) {
         if (!Utils.canUpdate()) return;

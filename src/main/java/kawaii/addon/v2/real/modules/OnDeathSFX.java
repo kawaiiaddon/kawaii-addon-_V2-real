@@ -74,6 +74,7 @@ public class OnDeathSFX extends Module {
 
     private boolean wasDead = false;
 
+    @SuppressWarnings("unused")
     @EventHandler
     private void onTick(TickEvent.Post event) {
         assert mc.player != null;

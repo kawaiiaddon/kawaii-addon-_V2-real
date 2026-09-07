@@ -55,6 +55,7 @@ public class SwordSwap extends Module {
         useTicks = 0;
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     private void onTick(TickEvent.Pre event) {
         if (mc.player == null || mc.getConnection() == null) return;
@@ -102,6 +103,7 @@ public class SwordSwap extends Module {
         }
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     private void onSendPacket(PacketEvent.Send event) {
         if (mode.get() != SwapMode.GhostHand || !swapped) return;
