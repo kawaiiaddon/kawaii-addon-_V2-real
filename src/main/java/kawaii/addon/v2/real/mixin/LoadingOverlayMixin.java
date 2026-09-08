@@ -14,7 +14,7 @@ public class LoadingOverlayMixin {
         constant = @Constant(intValue = 239)
     )
     private static int modifyLightRed(int original) {
-        return 194;
+        return 200;
     }
 
     //green
@@ -23,7 +23,7 @@ public class LoadingOverlayMixin {
         constant = @Constant(intValue = 50)
     )
     private static int modifyLightGreen(int original) {
-        return 28;
+        return 0;
     }
 
     //blue
@@ -32,6 +32,6 @@ public class LoadingOverlayMixin {
         constant = @Constant(intValue = 61)
     )
     private static int modifyLightBlue(int original) {
-        return 240;
+        return 255;
     }
 }

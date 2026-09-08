@@ -1,5 +1,5 @@
-<img src="https://raw.githubusercontent.com/kawaiiaddon/kawaii-addon-_V2-real/refs/heads/26.x/src/main/resources/assets/kawaii-addon/icon/watermark.png"> 
-</img> 
+<img src="https://raw.githubusercontent.com/kawaiiaddon/kawaii-addon-_V2-real/refs/heads/26.x/src/main/resources/assets/kawaii-addon/icon/watermark.png" alt="not loading?"> 
+ 
 
 # Kawaii Addon v2 Real
 
@@ -60,6 +60,7 @@ A **Meteor Client addon** for Minecraft 26.2 that displays **catgirl images** + 
       - CoordSpoofer = spoof your coords in f3 menu. 
       - OnDeathSFX = play a sound effect when you die (in game). 
       - SwordSwap = test module for testing silent item swap.
+      - ActionBarCensor = Hides the 2b2t.org message.
 
 ---
 
