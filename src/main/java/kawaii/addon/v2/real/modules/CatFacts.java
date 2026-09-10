@@ -32,6 +32,7 @@ public class CatFacts extends Module {
         timer = 0;
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     private void onTick(TickEvent.Post event) {
         if (timer <= 0) {

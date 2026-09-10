@@ -3,6 +3,7 @@ package kawaii.addon.v2.real.hud;
 import kawaii.addon.v2.real.KawaiiAddon;
 import meteordevelopment.meteorclient.settings.BoolSetting;
 import meteordevelopment.meteorclient.settings.ColorSetting;
+import meteordevelopment.meteorclient.settings.DoubleSetting;
 import meteordevelopment.meteorclient.settings.EnumSetting;
 import meteordevelopment.meteorclient.settings.Setting;
 import meteordevelopment.meteorclient.settings.SettingGroup;
@@ -38,6 +39,17 @@ public class PlayerSeekerHud extends HudElement {
         .name("display-mode")
         .description("What information to display for each player.")
         .defaultValue(DisplayMode.Both)
+        .build()
+    );
+
+    private final Setting<Double> textScale = sgGeneral.add(new DoubleSetting.Builder()
+        .name("text-scale")
+        .description("Scale of the text.")
+        .defaultValue(1.0)
+        .min(0.5)
+        .max(3.0)
+        .sliderMin(0.5)
+        .sliderMax(2.0)
         .build()
     );
 
@@ -91,6 +103,8 @@ public class PlayerSeekerHud extends HudElement {
     public void render(HudRenderer renderer) {
         if (mc.level == null || mc.player == null) return;
 
+        double scale = textScale.get();
+
         List<Player> players = mc.level.players().stream()
             .filter(p -> p != mc.player)
             .sorted(Comparator.comparing(p -> p.getGameProfile().name()))
@@ -98,8 +112,8 @@ public class PlayerSeekerHud extends HudElement {
 
         if (players.isEmpty()) {
             String noPlayersText = "No players nearby";
-            double width = renderer.textWidth(noPlayersText, false);
-            double height = renderer.textHeight(false);
+            double width = renderer.textWidth(noPlayersText, false, scale);
+            double height = renderer.textHeight(false, scale);
 
             if (backgroundEnabled.get()) {
                 renderer.quad(x, y, width, height, backgroundColor.get());
@@ -107,22 +121,24 @@ public class PlayerSeekerHud extends HudElement {
             if (outlineEnabled.get()) {
                 renderOutline(renderer, x, y, width, height);
             }
-            renderer.text(noPlayersText, x, y, Color.WHITE, false);
+            renderer.text(noPlayersText, x, y, Color.WHITE, false, scale);
             setSize(width, height);
             return;
         }
 
         double currentY = y;
         double maxWidth = 0;
+        double lineSpacing = 2.0 * scale;
 
         Vec3 localPos = mc.player.position();
 
         for (Player player : players) {
             String text = getPlayerText(player, localPos);
-            maxWidth = Math.max(maxWidth, renderer.textWidth(text, false));
+            maxWidth = Math.max(maxWidth, renderer.textWidth(text, false, scale));
         }
 
-        double totalHeight = (renderer.textHeight(false) + 2) * players.size();
+        double textHeight = renderer.textHeight(false, scale);
+        double totalHeight = (textHeight + lineSpacing) * players.size();
 
         if (backgroundEnabled.get()) {
             renderer.quad(x, y, maxWidth, totalHeight, backgroundColor.get());
@@ -134,8 +150,8 @@ public class PlayerSeekerHud extends HudElement {
         for (Player player : players) {
             String text = getPlayerText(player, localPos);
             Color textColor = Friends.get().isFriend(player) ? friendColor.get() : playerColor.get();
-            renderer.text(text, x, currentY, textColor, false);
-            currentY += renderer.textHeight(false) + 2;
+            renderer.text(text, x, currentY, textColor, false, scale);
+            currentY += textHeight + lineSpacing;
         }
 
         setSize(maxWidth, totalHeight);

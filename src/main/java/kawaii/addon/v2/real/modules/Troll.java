@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 
 import java.util.concurrent.ThreadLocalRandom;
+import static kawaii.addon.v2.real.util.FilePath.space;
 
 public class Troll extends Module {
     public Troll() {
@@ -21,16 +22,19 @@ public class Troll extends Module {
     private int ticksSinceLastInput = 0;
     private static final int IDLE_THRESHOLD = 2400;
 
+    @SuppressWarnings("unused")
     @EventHandler
     private void onKeyInput(KeyEvent event) {
         ticksSinceLastInput = 0;
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     private void onMouseClick(MouseClickEvent event) {
         ticksSinceLastInput = 0;
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     private void onMouseScroll(MouseScrollEvent event) {
         ticksSinceLastInput = 0;
@@ -43,11 +47,12 @@ public class Troll extends Module {
         public final SoundEvent sound;
 
         Sound(String soundEventName) {
-            ResourceLocation id = ResourceLocation.fromNamespaceAndPath("kawaii-addon", soundEventName);
+            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(space, soundEventName);
             this.sound = SoundEvent.createVariableRangeEvent(id);
         }
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     private void onTick(TickEvent.Pre event) {
         if (mc.player == null) return;

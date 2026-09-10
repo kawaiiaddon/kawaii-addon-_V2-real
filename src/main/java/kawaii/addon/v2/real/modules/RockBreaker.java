@@ -14,6 +14,7 @@ public class RockBreaker extends Module {
         super(KawaiiAddon.CATEGORY, "RockBreaker", "might break bedrock on some servers.");
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     private void onTick(TickEvent.Post event) {
         if (mc.player != null) {

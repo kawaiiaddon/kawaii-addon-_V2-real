@@ -4,6 +4,7 @@ import kawaii.addon.v2.real.commands.*;
 import kawaii.addon.v2.real.hud.*;
 import kawaii.addon.v2.real.modules.*;
 import com.mojang.logging.LogUtils;
+import meteordevelopment.meteorclient.addons.GithubRepo;
 import meteordevelopment.meteorclient.addons.MeteorAddon;
 import meteordevelopment.meteorclient.commands.Commands;
 import meteordevelopment.meteorclient.systems.hud.Hud;
@@ -35,6 +36,7 @@ public class KawaiiAddon extends MeteorAddon {
         Modules.get().add(new SwordSwap());
         Modules.get().add(new OnDeathSFX());
         Modules.get().add(new ActionBarCensor());
+        Modules.get().add(new PacketEat());
 
         // Commands
         Commands.add(new Cuddle());
@@ -42,6 +44,7 @@ public class KawaiiAddon extends MeteorAddon {
         Commands.add(new Dupe());
         Commands.add(new Rat());
         Commands.add(new FriendSync());
+        Commands.add(new CoinFlip());
 
         // HUD
         Hud.get().register(Cat.INFO);
@@ -57,5 +60,10 @@ public class KawaiiAddon extends MeteorAddon {
     @Override
     public String getPackage() {
         return "kawaii.addon.v2.real";
+    }
+
+    @Override
+    public GithubRepo getRepo() {
+        return new GithubRepo("kawaiiaddon", "kawaii-addon-_V2-real");
     }
 }

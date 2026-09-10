@@ -74,6 +74,7 @@ public class AntiWeb extends Module {
         restoreIfSwapped();
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     private void onTick(TickEvent.Pre event) {
         if (mc.player == null || mc.level == null || mc.getConnection() == null) return;

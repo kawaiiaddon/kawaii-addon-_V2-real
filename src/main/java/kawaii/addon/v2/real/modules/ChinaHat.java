@@ -226,6 +226,8 @@ public class ChinaHat extends Module {
         .visible(() -> cosmeticType.get() == CosmeticType.Chinese_Hat && particles.get())
         .build()
     );
+
+    @SuppressWarnings("unused")
     private final Setting<Double> particleRise = sgParticleMove.add(new DoubleSetting.Builder()
         .name("rise-height")
         .description("How high stars float up before fading.")
@@ -403,6 +405,7 @@ public class ChinaHat extends Module {
         }
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     private void onRender3D(Render3DEvent event) {
         if (mc.player == null) return;

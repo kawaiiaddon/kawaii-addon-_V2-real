@@ -20,6 +20,6 @@ public class Cape extends Module {
     }
 
     public enum Capes{
-        kawaii, cat, idk, turtle, hutao, vape, RETRO, h0rny, astolfo
+        kawaii, cat, idk, turtle, hutao, vape, RETRO, h0rny, astolfo, RusherHack, phobos, Shoreline, future
     }
 }
