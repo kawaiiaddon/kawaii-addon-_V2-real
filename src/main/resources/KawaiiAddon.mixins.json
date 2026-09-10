@@ -6,6 +6,7 @@
     "AbstractClientPlayerEntityMixin",
     "DebugHudMixin",
     "InGameHudMixin",
+    "LoadingOverlayMixin",
     "MapRendererMixin",
     "meteor.FriendsMixin"
   ],

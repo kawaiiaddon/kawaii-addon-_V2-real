@@ -21,6 +21,7 @@ public class SwapUtil {
         return -1;
     }
 
+    @SuppressWarnings("unused")
     public static int findInHotbar(Item item) {
         for (int i = 0; i < 9; i++) {
             assert mc.player != null;
@@ -58,10 +59,12 @@ public class SwapUtil {
         savedSlot = -1;
     }
 
+    @SuppressWarnings("unused")
     public static int getSavedSlot() {
         return savedSlot;
     }
 
+    @SuppressWarnings("unused")
     public static boolean isSwapped() {
         return savedSlot != -1;
     }

@@ -21,6 +21,7 @@ public abstract class FriendsMixin {
     @Shadow public abstract boolean add(Friend friend);
     @Shadow public abstract Friend get(String name);
 
+    @SuppressWarnings("unused")
     @Unique
     public int importFromMio() throws Exception {
         Path path = Paths.get(
@@ -52,6 +53,7 @@ public abstract class FriendsMixin {
         return added;
     }
 
+    @SuppressWarnings("unused")
     @Unique
     public int importFromWurst() throws Exception {
         Path path = Paths.get(

@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import static kawaii.addon.v2.real.util.FilePath.space;
 import static meteordevelopment.meteorclient.MeteorClient.mc;
 
 @Mixin(AbstractClientPlayer.class)
@@ -48,15 +49,19 @@ public abstract class AbstractClientPlayerEntityMixin extends Entity {
     @Unique
     private ClientAsset.Texture getCapeAsset(Cape module, PlayerSkin original) {
         Identifier id = switch (module.capes.get()) {
-            case kawaii -> Identifier.fromNamespaceAndPath("kawaii-addon", "cape/kawaii.png");
-            case cat -> Identifier.fromNamespaceAndPath("kawaii-addon", "cape/cat.png");
-            case idk -> Identifier.fromNamespaceAndPath("kawaii-addon", "cape/idk.png");
-            case turtle -> Identifier.fromNamespaceAndPath("kawaii-addon", "cape/turtle.png");
-            case hutao -> Identifier.fromNamespaceAndPath("kawaii-addon", "cape/hutao.png");
-            case vape -> Identifier.fromNamespaceAndPath("kawaii-addon", "cape/vape.png");
-            case RETRO -> Identifier.fromNamespaceAndPath("kawaii-addon", "cape/retro.png");
-            case h0rny -> Identifier.fromNamespaceAndPath("kawaii-addon", "cape/h0rny.png");
-            case astolfo -> Identifier.fromNamespaceAndPath("kawaii-addon", "cape/astolfo.png");
+            case kawaii -> Identifier.fromNamespaceAndPath(space, "cape/kawaii.png");
+            case cat -> Identifier.fromNamespaceAndPath(space, "cape/cat.png");
+            case idk -> Identifier.fromNamespaceAndPath(space, "cape/idk.png");
+            case turtle -> Identifier.fromNamespaceAndPath(space, "cape/turtle.png");
+            case hutao -> Identifier.fromNamespaceAndPath(space, "cape/hutao.png");
+            case vape -> Identifier.fromNamespaceAndPath(space, "cape/vape.png");
+            case RETRO -> Identifier.fromNamespaceAndPath(space, "cape/retro.png");
+            case h0rny -> Identifier.fromNamespaceAndPath(space, "cape/h0rny.png");
+            case astolfo -> Identifier.fromNamespaceAndPath(space, "cape/astolfo.png");
+            case RusherHack -> Identifier.fromNamespaceAndPath(space, "cape/rusherhack.png");
+            case phobos -> Identifier.fromNamespaceAndPath(space, "cape/phobos.png");
+            case Shoreline -> Identifier.fromNamespaceAndPath(space, "cape/shoreline.png");
+            case future -> Identifier.fromNamespaceAndPath(space, "cape/future.png");
             default -> null;
         };
 
