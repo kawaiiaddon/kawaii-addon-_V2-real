@@ -28,7 +28,7 @@
     <img src="https://img.shields.io/badge/Verified%20Addon-Yes-green" alt="Verified Addon">
 </a>
 
-A **Meteor Client addon** for Minecraft 26.2 that displays **catgirl images** + more, adding some kawaii flair to your client!  **(meme addon)** ✨
+A **Meteor Client addon** for Minecraft 26.x that displays **catgirl images** + more, adding some kawaii flair to your client!  **(meme addon)** ✨
 
 **kinda outdated**: 1.21.4, 1.21.5, 1.21.7, 1.21.8, 1.21.10 & 1.21.11
 
@@ -47,6 +47,7 @@ A **Meteor Client addon** for Minecraft 26.2 that displays **catgirl images** + 
       - CrashOut = closes the game.
       - FriendSync = syncs your friends list from other clients with meteor.
       - RatArt = sends rat ascci art in chat
+      - coinflip = Flip a coin.
 
     Modules : 
       - Cape = gives you a cape (client side only) 
@@ -61,6 +62,7 @@ A **Meteor Client addon** for Minecraft 26.2 that displays **catgirl images** + 
       - OnDeathSFX = play a sound effect when you die (in game). 
       - SwordSwap = test module for testing silent item swap.
       - ActionBarCensor = Hides the 2b2t.org message.
+      - PacketEat = Packets are yummy.
 
 ---
 
