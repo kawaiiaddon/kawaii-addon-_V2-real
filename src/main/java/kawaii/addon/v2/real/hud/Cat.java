@@ -61,7 +61,7 @@ public class Cat extends HudElement {
     );
 
     public enum Picture {
-        Cat1, Cat2, Cat3, Cat4, Cat5, Cat6, Cat7, Cat8, Cat9, Cat10, Cat11, Cat12, Cat13, Cat14
+        Cat1, Cat2, Cat3, Cat4, Cat5, Cat6, Cat7, Cat8, Cat9, Cat10, Cat11, Cat12, Cat13, Cat14, Cat15, Cat16, Cat17, Cat18, Cat19, Cat20, Cat21, Cat22, Cat23, Cat24, Cat25, Cat26
     }
 
     private Identifier TEXTURE;
@@ -83,6 +83,18 @@ public class Cat extends HudElement {
             case Cat12 -> TEXTURE = Identifier.fromNamespaceAndPath(space, "hud/cat12.png");
             case Cat13 -> TEXTURE = Identifier.fromNamespaceAndPath(space, "hud/cat13.png");
             case Cat14 -> TEXTURE = Identifier.fromNamespaceAndPath(space, "hud/cat14.png");
+            case Cat15 -> TEXTURE = Identifier.fromNamespaceAndPath(space, "hud/cat15.png");
+            case Cat16 -> TEXTURE = Identifier.fromNamespaceAndPath(space, "hud/cat16.png");
+            case Cat17 -> TEXTURE = Identifier.fromNamespaceAndPath(space, "hud/cat17.png");
+            case Cat18 -> TEXTURE = Identifier.fromNamespaceAndPath(space, "hud/cat18.png");
+            case Cat19 -> TEXTURE = Identifier.fromNamespaceAndPath(space, "hud/cat19.png");
+            case Cat20 -> TEXTURE = Identifier.fromNamespaceAndPath(space, "hud/cat20.png");
+            case Cat21 -> TEXTURE = Identifier.fromNamespaceAndPath(space, "hud/cat21.png");
+            case Cat22 -> TEXTURE = Identifier.fromNamespaceAndPath(space, "hud/cat22.png");
+            case Cat23 -> TEXTURE = Identifier.fromNamespaceAndPath(space, "hud/cat23.png");
+            case Cat24 -> TEXTURE = Identifier.fromNamespaceAndPath(space, "hud/cat24.png");
+            case Cat25 -> TEXTURE = Identifier.fromNamespaceAndPath(space, "hud/cat25.png");
+            case Cat26 -> TEXTURE = Identifier.fromNamespaceAndPath(space, "hud/cat26.png");
         }
         int n = size.get();
         int x_width = width.get();
