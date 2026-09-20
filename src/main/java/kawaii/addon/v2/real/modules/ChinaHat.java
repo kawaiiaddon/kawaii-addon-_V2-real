@@ -19,7 +19,10 @@ import java.util.List;
 import java.util.Random;
 
 public class ChinaHat extends Module {
-    public enum CosmeticType { Chinese_Hat, Halo }
+    public enum CosmeticType { Chinese_Hat, Halo, Cat_Ears }
+
+    // How far below the top of the head the head "pivots" (used so ears follow head pitch)
+    private static final double HEAD_PIVOT_DROP = 0.45;
 
     // ── Groups ──────────────────────────────────────────────────
     private final SettingGroup sgGeneral       = settings.getDefaultGroup();
@@ -29,11 +32,12 @@ public class ChinaHat extends Module {
     private final SettingGroup sgParticleMove  = settings.createGroup("Particle Movement");
     private final SettingGroup sgParticleColor = settings.createGroup("Particle Color");
     private final SettingGroup sgHalo          = settings.createGroup("Halo");
+    private final SettingGroup sgCatEars       = settings.createGroup("Cat Ears");
 
     // ── General ──────────────────────────────────────────────────
     private final Setting<CosmeticType> cosmeticType = sgGeneral.add(new EnumSetting.Builder<CosmeticType>()
         .name("cosmetic-type")
-        .description("Which cosmetic to show. Switch between Chinese Hat and Halo.")
+        .description("Which cosmetic to show. Switch between Chinese Hat, Halo and Cat Ears.")
         .defaultValue(CosmeticType.Chinese_Hat)
         .build()
     );
@@ -373,6 +377,120 @@ public class ChinaHat extends Module {
         .build()
     );
 
+    // ── Cat Ears ─────────────────────────────────────────────────
+    private final Setting<Boolean> earsEnabled = sgCatEars.add(new BoolSetting.Builder()
+        .name("enabled")
+        .description("Show cat ears on your head.")
+        .defaultValue(true)
+        .visible(() -> cosmeticType.get() == CosmeticType.Cat_Ears)
+        .build()
+    );
+    private final Setting<Boolean> earRainbow = sgCatEars.add(new BoolSetting.Builder()
+        .name("rainbow")
+        .description("Ears cycle through rainbow colors.")
+        .defaultValue(false)
+        .visible(() -> cosmeticType.get() == CosmeticType.Cat_Ears && earsEnabled.get())
+        .build()
+    );
+    private final Setting<Double> earRainbowSpeed = sgCatEars.add(new DoubleSetting.Builder()
+        .name("rainbow-speed")
+        .description("How fast the ears change color.")
+        .defaultValue(1.0).min(0.1).max(5.0).sliderMax(5.0)
+        .visible(() -> cosmeticType.get() == CosmeticType.Cat_Ears && earsEnabled.get() && earRainbow.get())
+        .build()
+    );
+    private final Setting<SettingColor> earColorSetting = sgCatEars.add(new ColorSetting.Builder()
+        .name("color")
+        .description("Color of the ears when rainbow is off.")
+        .defaultValue(new SettingColor(55, 55, 60, 240))
+        .visible(() -> cosmeticType.get() == CosmeticType.Cat_Ears && earsEnabled.get() && !earRainbow.get())
+        .build()
+    );
+    private final Setting<Boolean> earInner = sgCatEars.add(new BoolSetting.Builder()
+        .name("inner-ear")
+        .description("Draws a colored patch inside the front of each ear.")
+        .defaultValue(true)
+        .visible(() -> cosmeticType.get() == CosmeticType.Cat_Ears && earsEnabled.get())
+        .build()
+    );
+    private final Setting<SettingColor> earInnerColorSetting = sgCatEars.add(new ColorSetting.Builder()
+        .name("inner-color")
+        .description("Color of the inner ear patch.")
+        .defaultValue(new SettingColor(255, 140, 170, 240))
+        .visible(() -> cosmeticType.get() == CosmeticType.Cat_Ears && earsEnabled.get() && earInner.get())
+        .build()
+    );
+    private final Setting<Double> earHeight = sgCatEars.add(new DoubleSetting.Builder()
+        .name("height")
+        .description("How tall each ear is.")
+        .defaultValue(0.22).min(0.05).max(1.0).sliderMax(1.0)
+        .visible(() -> cosmeticType.get() == CosmeticType.Cat_Ears && earsEnabled.get())
+        .build()
+    );
+    private final Setting<Double> earWidth = sgCatEars.add(new DoubleSetting.Builder()
+        .name("width")
+        .description("How wide the base of each ear is.")
+        .defaultValue(0.18).min(0.05).max(0.6).sliderMax(0.6)
+        .visible(() -> cosmeticType.get() == CosmeticType.Cat_Ears && earsEnabled.get())
+        .build()
+    );
+    private final Setting<Double> earThickness = sgCatEars.add(new DoubleSetting.Builder()
+        .name("thickness")
+        .description("How thick each ear is from front to back.")
+        .defaultValue(0.07).min(0.02).max(0.3).sliderMax(0.3)
+        .visible(() -> cosmeticType.get() == CosmeticType.Cat_Ears && earsEnabled.get())
+        .build()
+    );
+    private final Setting<Double> earSpacing = sgCatEars.add(new DoubleSetting.Builder()
+        .name("spacing")
+        .description("How far each ear sits from the center of your head.")
+        .defaultValue(0.15).min(0.0).max(0.5).sliderMax(0.5)
+        .visible(() -> cosmeticType.get() == CosmeticType.Cat_Ears && earsEnabled.get())
+        .build()
+    );
+    private final Setting<Double> earTilt = sgCatEars.add(new DoubleSetting.Builder()
+        .name("tilt")
+        .description("How far the ear tips lean outward in degrees. Negative leans inward.")
+        .defaultValue(12.0).min(-45.0).max(45.0).sliderMin(-45.0).sliderMax(45.0)
+        .visible(() -> cosmeticType.get() == CosmeticType.Cat_Ears && earsEnabled.get())
+        .build()
+    );
+    private final Setting<Double> earYOffset = sgCatEars.add(new DoubleSetting.Builder()
+        .name("y-offset")
+        .description("Moves the ears up or down on your head.")
+        .defaultValue(-0.02).min(-0.5).max(0.5).sliderMin(-0.5).sliderMax(0.5)
+        .visible(() -> cosmeticType.get() == CosmeticType.Cat_Ears && earsEnabled.get())
+        .build()
+    );
+    private final Setting<Double> earForwardOffset = sgCatEars.add(new DoubleSetting.Builder()
+        .name("forward-offset")
+        .description("Moves the ears toward the front (+) or back (-) of your head.")
+        .defaultValue(0.0).min(-0.3).max(0.3).sliderMin(-0.3).sliderMax(0.3)
+        .visible(() -> cosmeticType.get() == CosmeticType.Cat_Ears && earsEnabled.get())
+        .build()
+    );
+    private final Setting<Boolean> earFollowPitch = sgCatEars.add(new BoolSetting.Builder()
+        .name("follow-pitch")
+        .description("Ears tilt with your head when you look up and down.")
+        .defaultValue(true)
+        .visible(() -> cosmeticType.get() == CosmeticType.Cat_Ears && earsEnabled.get())
+        .build()
+    );
+    private final Setting<Boolean> earTwitch = sgCatEars.add(new BoolSetting.Builder()
+        .name("twitch")
+        .description("Ears randomly twitch every few seconds.")
+        .defaultValue(true)
+        .visible(() -> cosmeticType.get() == CosmeticType.Cat_Ears && earsEnabled.get())
+        .build()
+    );
+    private final Setting<Double> earTwitchSpeed = sgCatEars.add(new DoubleSetting.Builder()
+        .name("twitch-speed")
+        .description("How often the ears twitch.")
+        .defaultValue(1.0).min(0.1).max(5.0).sliderMax(5.0)
+        .visible(() -> cosmeticType.get() == CosmeticType.Cat_Ears && earsEnabled.get() && earTwitch.get())
+        .build()
+    );
+
     // ── Internal state ───────────────────────────────────────────
     private final List<StarParticle> activeParticles = new ArrayList<>();
     private final Deque<AfterimageFrame> afterimageFrames = new ArrayDeque<>();
@@ -382,7 +500,7 @@ public class ChinaHat extends Module {
     private double haloAngle = 0;
 
     public ChinaHat() {
-        super(KawaiiAddon.CATEGORY, "cosmetic-hat", "Renders cosmetics on your player. Switch between Chinese Hat and Halo.");
+        super(KawaiiAddon.CATEGORY, "cosmetic-hat", "Renders cosmetics on your player. Switch between Chinese Hat, Halo and Cat Ears.");
     }
 
     @Override
@@ -622,7 +740,169 @@ public class ChinaHat extends Module {
             }
 
             drawHaloRing(event, x, haloY, z, hr, ht, baseTilt, haloAngle, haloSegs, haloColor, haloGlow, headYaw);
+
+            // ── Cat Ears ─────────────────────────────────────────────
+        } else if (cosmeticType.get() == CosmeticType.Cat_Ears && earsEnabled.get()) {
+            // Smoothly interpolated head rotation so the ears don't lag behind the head model
+            double earYaw = lerpAngle(mc.player.yHeadRotO, mc.player.getYHeadRot(), event.tickDelta);
+            double earPitch = mc.player.xRotO + (mc.player.getXRot() - mc.player.xRotO) * event.tickDelta;
+            double earY = headY + earYOffset.get();
+
+            Color earColor;
+            if (earRainbow.get()) {
+                float hue = (float)((elapsed * earRainbowSpeed.get() * 0.1) % 1.0);
+                int rgb = java.awt.Color.HSBtoRGB(hue, 1.0f, 1.0f);
+                java.awt.Color c = new java.awt.Color(rgb);
+                earColor = new Color(c.getRed(), c.getGreen(), c.getBlue(), 240);
+            } else {
+                earColor = earColorSetting.get();
+            }
+            Color innerColor = earInner.get() ? earInnerColorSetting.get() : null;
+
+            // Afterimage
+            if (afterimage.get()) {
+                if (elapsed - lastFrameTime >= afterimageInterval.get()) {
+                    lastFrameTime = elapsed;
+                    afterimageFrames.addLast(new AfterimageFrame(x, earY, z, earColor, 1.0f, earYaw, earPitch));
+                    while (afterimageFrames.size() > afterimageCount.get()) afterimageFrames.pollFirst();
+                }
+                int totalFrames = afterimageFrames.size();
+                int frameIndex = 0;
+                Iterator<AfterimageFrame> fit = afterimageFrames.iterator();
+                while (fit.hasNext()) {
+                    AfterimageFrame frame = fit.next();
+                    frame.alpha -= (float)(event.tickDelta * 0.016f * afterimageFadeSpeed.get() * 3.0f);
+                    if (frame.alpha <= 0) { fit.remove(); continue; }
+                    float ageFraction = (float) frameIndex / Math.max(1, totalFrames - 1);
+                    int alpha = (int)(frame.alpha * (1.0f - ageFraction * 0.7f) * 180);
+                    alpha = Math.clamp(alpha, 0, 255);
+                    Color ghostColor;
+                    if (afterimageRainbow.get()) {
+                        float hue = afterimageRainbowSync.get()
+                            ? (float)((elapsed * earRainbowSpeed.get() * 0.1 + ageFraction * 0.1) % 1.0)
+                            : (float)((elapsed * earRainbowSpeed.get() * 0.1 + ageFraction * 0.3) % 1.0);
+                        int rgb = java.awt.Color.HSBtoRGB(hue, 1.0f, 1.0f);
+                        java.awt.Color c = new java.awt.Color(rgb);
+                        ghostColor = new Color(c.getRed(), c.getGreen(), c.getBlue(), alpha);
+                    } else {
+                        SettingColor base = afterimageColorSetting.get();
+                        ghostColor = new Color(base.r, base.g, base.b, alpha);
+                    }
+                    drawCatEars(event, frame.x, frame.y, frame.z, frame.yaw, frame.pitch, elapsed, ghostColor, null);
+                    frameIndex++;
+                }
+            }
+
+            drawCatEars(event, x, earY, z, earYaw, earPitch, elapsed, earColor, innerColor);
         }
+    }
+
+    // ── Cat ear rendering ────────────────────────────────────────
+    // Each ear is a wedge: a rectangular base sitting on the head that narrows to a short ridge at the tip.
+    // Ear-local axes: ls = outward from the head, lf = toward the front of the face, lu = up.
+    private void drawCatEars(Render3DEvent event, double x, double y, double z,
+                             double yawDeg, double pitchDeg, double elapsed,
+                             Color color, Color innerColor) {
+        double yaw = Math.toRadians(yawDeg);
+        double pitch = earFollowPitch.get() ? Math.toRadians(pitchDeg) : 0;
+        double cosY = Math.cos(yaw), sinY = Math.sin(yaw);
+        double cosP = Math.cos(pitch), sinP = Math.sin(pitch);
+
+        double w = earWidth.get();
+        double d = earThickness.get();
+        double h = earHeight.get();
+        double spacing = earSpacing.get();
+        double fwd = earForwardOffset.get();
+        double baseTip = h * Math.tan(Math.toRadians(earTilt.get()));
+
+        for (int side = -1; side <= 1; side += 2) {
+            double tip = baseTip + earTwitchOffset(elapsed, side, h);
+
+            // Base corners (on the head) and the two ridge points (at the tip)
+            double[] b1 = { -w / 2, -d / 2, 0 };
+            double[] b2 = {  w / 2, -d / 2, 0 };
+            double[] b3 = {  w / 2,  d / 2, 0 };
+            double[] b4 = { -w / 2,  d / 2, 0 };
+            double[] t1 = { tip, -d * 0.15, h };
+            double[] t2 = { tip,  d * 0.15, h };
+
+            double[] B1 = earPoint(b1, side, spacing, fwd, x, y, z, cosY, sinY, cosP, sinP);
+            double[] B2 = earPoint(b2, side, spacing, fwd, x, y, z, cosY, sinY, cosP, sinP);
+            double[] B3 = earPoint(b3, side, spacing, fwd, x, y, z, cosY, sinY, cosP, sinP);
+            double[] B4 = earPoint(b4, side, spacing, fwd, x, y, z, cosY, sinY, cosP, sinP);
+            double[] T1 = earPoint(t1, side, spacing, fwd, x, y, z, cosY, sinY, cosP, sinP);
+            double[] T2 = earPoint(t2, side, spacing, fwd, x, y, z, cosY, sinY, cosP, sinP);
+
+            earQuad(event, B2, B3, T2, T1, color); // outer side
+            earQuad(event, B1, B4, T2, T1, color); // inner side
+            earQuad(event, B3, B4, T2, T2, color); // front
+            earQuad(event, B1, B2, T1, T1, color); // back
+
+            // Inner ear patch: a shrunken copy of the front face, nudged forward to avoid z-fighting
+            if (innerColor != null) {
+                double[][] tri = { b3, b4, t2 };
+                double cs = (tri[0][0] + tri[1][0] + tri[2][0]) / 3.0;
+                double cf = (tri[0][1] + tri[1][1] + tri[2][1]) / 3.0;
+                double cu = (tri[0][2] + tri[1][2] + tri[2][2]) / 3.0;
+                double[][] out = new double[3][];
+                for (int i = 0; i < 3; i++) {
+                    double[] local = {
+                        cs + (tri[i][0] - cs) * 0.55,
+                        cf + (tri[i][1] - cf) * 0.55 + 0.006,
+                        cu + (tri[i][2] - cu) * 0.55
+                    };
+                    out[i] = earPoint(local, side, spacing, fwd, x, y, z, cosY, sinY, cosP, sinP);
+                }
+                earQuad(event, out[0], out[1], out[2], out[2], innerColor);
+            }
+        }
+    }
+
+    /** Converts an ear-local point into a world position, applying head yaw and (optionally) pitch. */
+    private double[] earPoint(double[] p, int side, double spacing, double fwd,
+                              double x, double y, double z,
+                              double cosY, double sinY, double cosP, double sinP) {
+        // Head-local coordinates: hs = sideways (mirrored per ear), hf = forward, hu = up from head top
+        double hs = side * (spacing + p[0]);
+        double hf = fwd + p[1];
+        double relU = p[2] + HEAD_PIVOT_DROP;
+
+        // Pitch around the neck (positive pitch = looking down)
+        double nf = hf * cosP + relU * sinP;
+        double nu = relU * cosP - hf * sinP;
+
+        // Minecraft yaw: forward = (-sin, cos), right = (-cos, -sin)
+        double wx = x + hs * (-cosY) + nf * (-sinY);
+        double wz = z + hs * (-sinY) + nf * cosY;
+        double wy = y + nu - HEAD_PIVOT_DROP;
+
+        return new double[]{ wx, wy, wz };
+    }
+
+    private void earQuad(Render3DEvent event, double[] a, double[] b, double[] c, double[] d, Color color) {
+        event.depthRenderer.quad(
+            a[0], a[1], a[2],
+            b[0], b[1], b[2],
+            c[0], c[1], c[2],
+            d[0], d[1], d[2],
+            color
+        );
+    }
+
+    /** Short damped wiggle of the ear tip once per twitch period. Left and right ears are slightly offset. */
+    private double earTwitchOffset(double elapsed, int side, double height) {
+        if (!earTwitch.get()) return 0;
+        double period = 4.0 / earTwitchSpeed.get();
+        double t = (((elapsed + (side > 0 ? 0.0 : 0.3)) % period) / period) / 0.1; // burst lasts 10% of the period
+        if (t >= 1.0) return 0;
+        return Math.sin(t * Math.PI * 4.0) * Math.sin(t * Math.PI) * height * 0.35;
+    }
+
+    private static double lerpAngle(double from, double to, double t) {
+        double diff = (to - from) % 360.0;
+        if (diff >= 180.0) diff -= 360.0;
+        else if (diff < -180.0) diff += 360.0;
+        return from + diff * t;
     }
 
     private void drawHaloRing(Render3DEvent event, double x, double y, double z,
@@ -721,8 +1001,13 @@ public class ChinaHat extends Module {
 
     private static class AfterimageFrame {
         double x, y, z; Color color; float alpha;
+        double yaw, pitch; // only used by Cat Ears
         AfterimageFrame(double x, double y, double z, Color color, float alpha) {
             this.x=x; this.y=y; this.z=z; this.color=color; this.alpha=alpha;
+        }
+        AfterimageFrame(double x, double y, double z, Color color, float alpha, double yaw, double pitch) {
+            this(x, y, z, color, alpha);
+            this.yaw=yaw; this.pitch=pitch;
         }
     }
 
