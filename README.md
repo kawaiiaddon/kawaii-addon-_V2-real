@@ -28,6 +28,14 @@
     <img src="https://img.shields.io/badge/Verified%20Addon-Yes-green" alt="Verified Addon">
 </a>
 
+<a href="https://kawaiiaddon.nl/">
+    <img src="https://img.shields.io/endpoint?url=https://ghloc.vercel.app/api/kawaiiaddon/kawaii-addon-_V2-real/badge?filter=.java$&label=lines%20of%20code&color=purple" alt="GitHub lines of code"/>
+</a>
+
+<a href="https://kawaiiaddon.nl/">
+    <img src="https://img.shields.io/github/languages/code-size/kawaiiaddon/kawaii-addon-_V2-real" alt="GitHub code size in bytes"/>
+</a>
+
 A **Meteor Client addon** for Minecraft 26.x that displays **catgirl images** + more, adding some kawaii flair to your client!  **(meme addon)** ✨
 
 **kinda outdated**: 1.21.4, 1.21.5, 1.21.7, 1.21.8, 1.21.10 & 1.21.11
