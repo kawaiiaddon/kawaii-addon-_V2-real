@@ -50,6 +50,7 @@ public class KawaiiAddon extends MeteorAddon {
         Hud.get().register(Cat.INFO);
         Hud.get().register(WaterMark.INFO);
         Hud.get().register(PlayerSeekerHud.INFO);
+        Hud.get().register(UWU.INFO);
     }
 
     @Override

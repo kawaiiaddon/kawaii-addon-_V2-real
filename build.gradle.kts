@@ -30,6 +30,10 @@ dependencies {
 
     // Meteor
     implementation(libs.meteor.client)
+
+    // GIF Reader
+    implementation(libs.gif.reader)
+    include(libs.gif.reader)
 }
 
 java {

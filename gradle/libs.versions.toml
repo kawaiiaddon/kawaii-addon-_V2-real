@@ -12,6 +12,9 @@ loom = "1.17-SNAPSHOT"
 # Meteor (https://github.com/MeteorDevelopment/meteor-client/)
 meteor = "26.2-SNAPSHOT"
 
+# GIF Reader https://github.com/ribasco/gif-reader
+gif = "1.1.0"
+
 [libraries]
 # Fabric base
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
@@ -19,6 +22,9 @@ fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-l
 
 # Meteor client
 meteor-client = { module = "meteordevelopment:meteor-client", version.ref = "meteor" }
+
+# GIF Reader
+gif-reader = { module = "com.ibasco.gifreader:gif-reader", version.ref = "gif" }
 
 [plugins]
 fabric-loom = { id = "net.fabricmc.fabric-loom", version.ref = "loom" }
