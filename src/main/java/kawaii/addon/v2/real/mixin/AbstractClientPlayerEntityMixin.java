@@ -1,6 +1,7 @@
 package kawaii.addon.v2.real.mixin;
 
 import kawaii.addon.v2.real.modules.Cape;
+import kawaii.addon.v2.real.util.RainbowCapeTexture;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.ClientAsset;
@@ -62,6 +63,7 @@ public abstract class AbstractClientPlayerEntityMixin extends Entity {
             case phobos -> Identifier.fromNamespaceAndPath(space, "cape/phobos.png");
             case Shoreline -> Identifier.fromNamespaceAndPath(space, "cape/shoreline.png");
             case future -> Identifier.fromNamespaceAndPath(space, "cape/future.png");
+            case RGB -> { RainbowCapeTexture.init(); yield RainbowCapeTexture.ID; }
             default -> null;
         };
 
