@@ -64,6 +64,8 @@ public abstract class AbstractClientPlayerEntityMixin extends Entity {
             case Shoreline -> Identifier.fromNamespaceAndPath(space, "cape/shoreline.png");
             case future -> Identifier.fromNamespaceAndPath(space, "cape/future.png");
             case RGB -> { RainbowCapeTexture.init(); yield RainbowCapeTexture.ID; }
+
+            //noinspection UnnecessaryDefault
             default -> null;
         };
 
