@@ -16,7 +16,7 @@ import static kawaii.addon.v2.real.util.FilePath.space;
 public class Cat extends HudElement {
     public static final HudElementInfo<Cat> INFO = new HudElementInfo<>(KawaiiAddon.HUD_GROUP, "cat-hud", "Displays a cat icon.", Cat::new);
 
-    static int imgTotal = 33;
+    static int imgTotal = 36;
 
     private static final Identifier[] TEXTURES = new Identifier[imgTotal];
 
@@ -88,7 +88,7 @@ public class Cat extends HudElement {
         Cat13, Cat14, Cat15, Cat16, Cat17, Cat18,
         Cat19, Cat20, Cat21, Cat22, Cat23, Cat24,
         Cat25, Cat26, Cat27, Cat28, Cat29, Cat30,
-        Cat31, Cat32, Cat33
+        Cat31, Cat32, Cat33, Cat34, Cat35, Cat36
     }
 
     private final Setting<Integer> picture = sg.add(new IntSetting.Builder()
@@ -147,6 +147,9 @@ public class Cat extends HudElement {
             case Cat31 -> TEXTURE = Identifier.fromNamespaceAndPath(space, "hud/cat31.png");
             case Cat32 -> TEXTURE = Identifier.fromNamespaceAndPath(space, "hud/cat32.png");
             case Cat33 -> TEXTURE = Identifier.fromNamespaceAndPath(space, "hud/cat33.png");
+            case Cat34 -> TEXTURE = Identifier.fromNamespaceAndPath(space, "hud/cat34.png");
+            case Cat35 -> TEXTURE = Identifier.fromNamespaceAndPath(space, "hud/cat35.png");
+            case Cat36 -> TEXTURE = Identifier.fromNamespaceAndPath(space, "hud/cat36.png");
         }
         int n = size.get();
         int x_width = width.get();

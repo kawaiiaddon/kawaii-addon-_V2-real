@@ -66,7 +66,7 @@ fun toMinecraftCompat(version: String): String {
 tasks {
     processResources {
         val propertyMap = mapOf(
-            "version" to project.version,
+            "version" to libs.versions.mod.version.get(),
             "minecraft_version" to toMinecraftCompat(libs.versions.minecraft.get()),
             "jdk_version" to libs.versions.jdk.get(),
         )
