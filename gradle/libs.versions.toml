@@ -12,7 +12,7 @@ loom = "1.17-SNAPSHOT"
 # Meteor (https://github.com/MeteorDevelopment/meteor-client/)
 meteor = "26.2-SNAPSHOT"
 
-# GIF Reader https://github.com/ribasco/gif-reader
+# GIF Reader (https://github.com/ribasco/gif-reader)
 gif = "1.1.0"
 
 [libraries]
