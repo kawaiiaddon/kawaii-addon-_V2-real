@@ -48,6 +48,7 @@ A **Meteor Client addon** for Minecraft 26.x that displays **catgirl images** + 
       - Cat = shows catgirl images.
       - Watermark = shows a watermark.
       - PlayerSeekerHud = shows info from nearby players.
+      - UwU-hud = Testing gifs.
 
     Commands :
       - FakeDupe = does nothing useful. 
