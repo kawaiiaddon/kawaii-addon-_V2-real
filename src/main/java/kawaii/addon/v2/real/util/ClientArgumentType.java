@@ -8,6 +8,8 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import java.util.Arrays;
 import java.util.Collection;
 
+import com.mojang.brigadier.StringReader;
+
 public class ClientArgumentType implements ArgumentType<String> {
     private static final String[] SUPPORTED_CLIENTS = { "mio", "wurst" };
 
@@ -24,7 +26,7 @@ public class ClientArgumentType implements ArgumentType<String> {
     }
 
     @Override
-    public String parse(com.mojang.brigadier.StringReader reader) {
+    public String parse(StringReader reader) {
         return reader.readUnquotedString();
     }
 

@@ -29,6 +29,9 @@ dependencies {
 
     // Meteor
     modImplementation("meteordevelopment:meteor-client:${properties["minecraft_version"] as String}-SNAPSHOT")
+
+    // GIF Reader
+    implementation("com.ibasco.gifreader:gif-reader:${properties["gif_version"] as String}")
 }
 
 tasks {
