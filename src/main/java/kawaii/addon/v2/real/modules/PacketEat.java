@@ -10,6 +10,7 @@ import meteordevelopment.meteorclient.utils.player.InvUtils;
 import meteordevelopment.orbit.EventHandler;
 import net.minecraft.network.protocol.game.ServerboundUseItemPacket;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.core.component.DataComponents;
@@ -243,7 +244,7 @@ public class PacketEat extends Module {
             if (goldenApple.found()) return goldenApple;
         }
 
-        FindItemResult hotbarFood = InvUtils.findInHotbar(itemStack -> itemStack.has(DataComponents.FOOD));
+        FindItemResult hotbarFood = InvUtils.findInHotbar((Item) DataComponents.FOOD);
         if (hotbarFood.found()) return hotbarFood;
 
         if (eatEnchantedGoldenApple.get()) {
@@ -258,7 +259,7 @@ public class PacketEat extends Module {
             if (goldenApple.found()) return goldenApple;
         }
 
-        return InvUtils.find(itemStack -> itemStack.has(DataComponents.FOOD));
+        return InvUtils.find((Item) DataComponents.FOOD);
     }
 
     private boolean checkCombat() {

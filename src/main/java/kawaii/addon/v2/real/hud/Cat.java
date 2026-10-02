@@ -16,6 +16,16 @@ import static kawaii.addon.v2.real.util.FilePath.space;
 public class Cat extends HudElement {
     public static final HudElementInfo<Cat> INFO = new HudElementInfo<>(KawaiiAddon.HUD_GROUP, "cat-hud", "Displays a cat icon.", Cat::new);
 
+    static int imgTotal = 51;
+
+    private static final ResourceLocation[] TEXTURES = new ResourceLocation[imgTotal];
+
+    static {
+        for (int i = 0; i < TEXTURES.length; i++) {
+            TEXTURES[i] = ResourceLocation.fromNamespaceAndPath(space, "hud/cat" + (i + 1) + ".png");
+        }
+    }
+
     public Cat() {
         super(INFO);
     }
@@ -53,21 +63,59 @@ public class Cat extends HudElement {
         .build()
     );
 
+    public enum SetMode {
+        Modern, OG
+    }
+
+    private final Setting<SetMode> modes = sg.add(new EnumSetting.Builder<SetMode>()
+        .name("Picture select mode")
+        .description("Which method you want to use for selecting a catgirl.")
+        .defaultValue(SetMode.Modern)
+        .build()
+    );
+
     private final Setting<Picture> mode = sg.add(new EnumSetting.Builder<Picture>()
         .name("picture")
         .description("set the picture you want.")
         .defaultValue(Picture.Cat1)
+        .visible(() -> modes.get() == SetMode.Modern)
         .build()
     );
 
     public enum Picture {
-        Cat1, Cat2, Cat3, Cat4, Cat5, Cat6, Cat7, Cat8, Cat9, Cat10, Cat11, Cat12, Cat13, Cat14
+        Cat1, Cat2, Cat3, Cat4, Cat5, Cat6,
+        Cat7, Cat8, Cat9, Cat10, Cat11, Cat12,
+        Cat13, Cat14, Cat15, Cat16, Cat17, Cat18,
+        Cat19, Cat20, Cat21, Cat22, Cat23, Cat24,
+        Cat25, Cat26, Cat27, Cat28, Cat29, Cat30,
+        Cat31, Cat32, Cat33, Cat34, Cat35, Cat36,
+        Cat37, Cat38, Cat39, Cat40, Cat41, Cat42,
+        Cat43, Cat44, Cat45, Cat46, Cat47, Cat48,
+        Cat49, Cat50, Cat51
     }
 
-    private ResourceLocation TEXTURE;
+    private final Setting<Integer> picture = sg.add(new IntSetting.Builder()
+        .name("picture")
+        .description("Select different pictures of catgirls.")
+        .defaultValue(1)
+        .min(1)
+        .sliderMin(1)
+        .sliderMax(imgTotal)
+        .visible(() -> modes.get() == SetMode.OG)
+        .build()
+    );
 
     @Override
     public void render(HudRenderer renderer) {
+        switch (modes.get()) {
+            case Modern -> ModernRender(renderer);
+            case OG -> OGRender(renderer);
+        }
+    }
+
+    private void ModernRender(HudRenderer renderer) {
+        ResourceLocation TEXTURE = null;
+
         switch (mode.get()) {
             case Cat1 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat1.png");
             case Cat2 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat2.png");
@@ -83,11 +131,60 @@ public class Cat extends HudElement {
             case Cat12 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat12.png");
             case Cat13 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat13.png");
             case Cat14 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat14.png");
+            case Cat15 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat15.png");
+            case Cat16 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat16.png");
+            case Cat17 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat17.png");
+            case Cat18 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat18.png");
+            case Cat19 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat19.png");
+            case Cat20 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat20.png");
+            case Cat21 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat21.png");
+            case Cat22 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat22.png");
+            case Cat23 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat23.png");
+            case Cat24 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat24.png");
+            case Cat25 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat25.png");
+            case Cat26 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat26.png");
+            case Cat27 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat27.png");
+            case Cat28 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat28.png");
+            case Cat29 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat29.png");
+            case Cat30 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat30.png");
+            case Cat31 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat31.png");
+            case Cat32 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat32.png");
+            case Cat33 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat33.png");
+            case Cat34 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat34.png");
+            case Cat35 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat35.png");
+            case Cat36 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat36.png");
+            case Cat37 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat37.png");
+            case Cat38 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat38.png");
+            case Cat39 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat39.png");
+            case Cat40 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat40.png");
+            case Cat41 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat41.png");
+            case Cat42 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat42.png");
+            case Cat43 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat43.png");
+            case Cat44 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat44.png");
+            case Cat45 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat45.png");
+            case Cat46 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat46.png");
+            case Cat47 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat47.png");
+            case Cat48 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat48.png");
+            case Cat49 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat49.png");
+            case Cat50 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat50.png");
+            case Cat51 -> TEXTURE = ResourceLocation.fromNamespaceAndPath(space, "hud/cat51.png");
         }
         int n = size.get();
         int x_width = width.get();
         int y_height = height.get();
         setSize(64 * x_width * n, 64 * y_height * n);
         renderer.texture(TEXTURE, x, y, getWidth(), getHeight(), Color.WHITE);
+    }
+
+    private void OGRender(HudRenderer renderer) {
+        int n = size.get();
+        int x_width = width.get();
+        int y_height = height.get();
+        setSize(64 * x_width * n, 64 * y_height * n);
+
+        int index = picture.get() - 1;
+        if (index < 0 || index >= TEXTURES.length) index = 0;
+
+        renderer.texture(TEXTURES[index], x, y, getWidth(), getHeight(), Color.WHITE);
     }
 }

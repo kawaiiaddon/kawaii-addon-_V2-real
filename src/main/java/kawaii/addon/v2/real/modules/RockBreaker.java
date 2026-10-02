@@ -22,10 +22,9 @@ public class RockBreaker extends Module {
             int y = pos.getY();
 
             assert mc.level != null;
-            if (mc.level.dimension() == Level.NETHER & y == 5) {
+            if (mc.level.dimension() == Level.NETHER && y == 5) {
                 assert mc.player != null;
-                String currentPrefix = Config.get().prefix.get();
-                String message = String.format(currentPrefix + "vclip -15");
+                String message = Config.get().prefix.get() + "vclip -15";
                 mc.player.connection.sendChat(message);
             }
         }

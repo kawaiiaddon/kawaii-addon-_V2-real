@@ -1,5 +1,6 @@
 package kawaii.addon.v2.real.util;
 
+import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -24,7 +25,7 @@ public class ClientArgumentType implements ArgumentType<String> {
     }
 
     @Override
-    public String parse(com.mojang.brigadier.StringReader reader) {
+    public String parse(StringReader reader) {
         return reader.readUnquotedString();
     }
 
