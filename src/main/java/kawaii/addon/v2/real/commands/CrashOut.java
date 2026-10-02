@@ -19,4 +19,3 @@ public class CrashOut extends Command {
         });
     }
 }
-

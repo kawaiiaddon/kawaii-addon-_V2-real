@@ -1,15 +1,14 @@
 package kawaii.addon.v2.real.util;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.protocol.game.ServerboundSetCarriedItemPacket;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 
 import java.util.Objects;
 
-public class SwapUtil {
+import static meteordevelopment.meteorclient.MeteorClient.mc;
 
-    private static final Minecraft mc = Minecraft.getInstance();
+public class SwapUtil {
 
     private static int savedSlot = -1;
 
@@ -63,7 +62,6 @@ public class SwapUtil {
     public static int getSavedSlot() {
         return savedSlot;
     }
-
     @SuppressWarnings("unused")
     public static boolean isSwapped() {
         return savedSlot != -1;

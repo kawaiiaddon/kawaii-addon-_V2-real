@@ -60,7 +60,6 @@ public class AntiWeb extends Module {
         .build()
     );
 
-    //private static final int RETRY_COOLDOWN = 10;
     private final Map<BlockPos, Integer> minedCooldowns = new HashMap<>();
     private boolean swapped = false;
 

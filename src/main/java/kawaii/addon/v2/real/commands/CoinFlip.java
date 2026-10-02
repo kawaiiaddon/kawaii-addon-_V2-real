@@ -4,6 +4,8 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import meteordevelopment.meteorclient.commands.Command;
 import net.minecraft.commands.SharedSuggestionProvider;
 
+import static kawaii.addon.v2.real.util.Maths.randomFloat;
+
 public class CoinFlip extends Command {
 
     public CoinFlip() {
@@ -16,7 +18,7 @@ public class CoinFlip extends Command {
     @Override
     public void build(LiteralArgumentBuilder<SharedSuggestionProvider> builder) {
         builder.executes(ctx -> {
-            info(Math.random() < 0.5 ? head : tail);
+            info(randomFloat(0f, 1f) < 0.5f ? head : tail);
             return SINGLE_SUCCESS;
         });
     }

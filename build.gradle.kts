@@ -32,12 +32,13 @@ dependencies {
 
     // GIF Reader
     implementation("com.ibasco.gifreader:gif-reader:${properties["gif_version"] as String}")
+    include("com.ibasco.gifreader:gif-reader:${properties["gif_version"] as String}")
 }
 
 tasks {
     processResources {
         val propertyMap = mapOf(
-            "version" to project.version,
+            "version" to project.property("mod_version"),
             "mc_version" to project.property("minecraft_version"),
         )
 

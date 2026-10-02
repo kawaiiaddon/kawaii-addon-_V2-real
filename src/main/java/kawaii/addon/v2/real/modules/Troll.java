@@ -21,7 +21,7 @@ public class Troll extends Module {
     }
 
     private int ticksSinceLastInput = 0;
-    private static final int IDLE_THRESHOLD = 2400;
+    private static final int IDLE_THRESHOLD = 2400; //120 seconds
 
     @SuppressWarnings("unused")
     @EventHandler
@@ -44,9 +44,7 @@ public class Troll extends Module {
     public enum Sound {
         TAKING_TOO_LONG("your_taking_too_long_event"),
         YOUR_LONG("your_long_event");
-
         public final SoundEvent sound;
-
         Sound(String soundEventName) {
             Identifier id = Identifier.fromNamespaceAndPath(space, soundEventName);
             this.sound = SoundEvent.createVariableRangeEvent(id);
@@ -60,22 +58,21 @@ public class Troll extends Module {
 
         ticksSinceLastInput++;
 
-        if (ticksSinceLastInput >= IDLE_THRESHOLD) {
-            if (ticksSinceLastInput == IDLE_THRESHOLD) {
-                Sound[] values = Sound.values();
-                Sound soundToPlay = values[ThreadLocalRandom.current().nextInt(values.length)];
+        if (ticksSinceLastInput > 0 && ticksSinceLastInput % IDLE_THRESHOLD == 0) {
+            Sound soundToPlay;
+            Sound[] values = Sound.values();
+            soundToPlay = values[ThreadLocalRandom.current().nextInt(values.length)];
 
                 double volume = 1.0;
                 double pitch = 1.0;
 
-                mc.getSoundManager().play(
-                    SimpleSoundInstance.forUI(
-                        soundToPlay.sound,
-                        (float) pitch,
-                        (float) volume
-                    )
-                );
-            }
+            mc.getSoundManager().play(
+                SimpleSoundInstance.forUI(
+                    soundToPlay.sound,
+                    (float) pitch,
+                    (float) volume
+                )
+            );
         }
     }
 }
