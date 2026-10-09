@@ -1,10 +1,7 @@
 package kawaii.addon.v2.real.hud;
 
 import kawaii.addon.v2.real.KawaiiAddon;
-import meteordevelopment.meteorclient.settings.EnumSetting;
-import meteordevelopment.meteorclient.settings.IntSetting;
-import meteordevelopment.meteorclient.settings.Setting;
-import meteordevelopment.meteorclient.settings.SettingGroup;
+import meteordevelopment.meteorclient.settings.*;
 import meteordevelopment.meteorclient.systems.hud.HudElement;
 import meteordevelopment.meteorclient.systems.hud.HudElementInfo;
 import meteordevelopment.meteorclient.systems.hud.HudRenderer;
@@ -32,34 +29,37 @@ public class Cat extends HudElement {
 
     private final SettingGroup sg = settings.getDefaultGroup();
 
-    private final Setting<Integer> size = sg.add(new IntSetting.Builder()
+    private final Setting<Double> size = sg.add(new DoubleSetting.Builder()
         .name("size")
         .description("set how big the cat is.")
-        .defaultValue(1)
-        .min(1)
-        .sliderMin(1)
-        .sliderMax(10)
+        .defaultValue(1.0)
+        .min(0.5)
+        .max(10.0)
+        .sliderRange(0.5, 10.0)
+        .decimalPlaces(1)
         .build()
     );
 
-    private final Setting<Integer> width = sg.add(new IntSetting.Builder()
+    private final Setting<Double> width = sg.add(new DoubleSetting.Builder()
         .name("width")
         .description("Stretch the cat in the x axis.")
-        .defaultValue(5)
-        .min(1)
-        .sliderMin(1)
-        .sliderMax(20)
+        .defaultValue(5.0)
+        .min(0.5)
+        .max(10.0)
+        .sliderRange(0.5, 10.0)
+        .decimalPlaces(1)
         .build()
     );
 
 
-    private final Setting<Integer> height = sg.add(new IntSetting.Builder()
+    private final Setting<Double> height = sg.add(new DoubleSetting.Builder()
         .name("height")
         .description("Stretch the cat in the y axis.")
-        .defaultValue(5)
-        .min(1)
-        .sliderMin(1)
-        .sliderMax(20)
+        .defaultValue(5.0)
+        .min(0.5)
+        .max(10.0)
+        .sliderRange(0.5, 10.0)
+        .decimalPlaces(1)
         .build()
     );
 
@@ -169,18 +169,18 @@ public class Cat extends HudElement {
             case Cat50 -> TEXTURE = Identifier.fromNamespaceAndPath(space, "hud/cat50.png");
             case Cat51 -> TEXTURE = Identifier.fromNamespaceAndPath(space, "hud/cat51.png");
         }
-        int n = size.get();
-        int x_width = width.get();
-        int y_height = height.get();
+        double n = size.get();
+        double x_width = width.get();
+        double y_height = height.get();
         setSize(64 * x_width * n, 64 * y_height * n);
         renderer.texture(TEXTURE, x, y, getWidth(), getHeight(), Color.WHITE);
     }
 
     private void OGRender(HudRenderer renderer) {
-        int n = size.get();
-        int x_width = width.get();
-        int y_height = height.get();
-        setSize(64 * x_width * n, 64 * y_height * n);
+        double n = size.get();
+        double x_width = width.get();
+        double y_height = height.get();
+        setSize(64 * n * x_width, 64 * n * y_height);
 
         int index = picture.get() - 1;
         if (index < 0 || index >= TEXTURES.length) index = 0;

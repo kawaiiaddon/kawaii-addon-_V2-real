@@ -4,7 +4,8 @@ import com.ibasco.image.gif.GifFrame;
 import com.ibasco.image.gif.GifImageReader;
 import com.mojang.blaze3d.platform.NativeImage;
 import kawaii.addon.v2.real.KawaiiAddon;
-import meteordevelopment.meteorclient.settings.IntSetting;
+import meteordevelopment.meteorclient.settings.DoubleSetting;
+import meteordevelopment.meteorclient.settings.EnumSetting;
 import meteordevelopment.meteorclient.settings.Setting;
 import meteordevelopment.meteorclient.settings.SettingGroup;
 import meteordevelopment.meteorclient.systems.hud.HudElement;
@@ -25,27 +26,64 @@ import static kawaii.addon.v2.real.util.FilePath.space;
 /*
  * DON'T TOUCH THIS FUCKING CODE IT MIGHT EXPLODE!!!!!!!!!!!!!!
  */
-public class UWU extends HudElement {
+public class GIF extends HudElement {
 
-    public static final HudElementInfo<UWU> INFO = new HudElementInfo<>(KawaiiAddon.HUD_GROUP, "UwU-hud", "Testing gifs.", UWU::new);
-    private static final String GIF_PATH = "/assets/" + space + "/uwu/blush-anime.gif";
-    private static final Identifier TEXTURE_ID = Identifier.fromNamespaceAndPath(space, "uwu/blush-anime-animated");
+    public static final HudElementInfo<GIF> INFO = new HudElementInfo<>(KawaiiAddon.HUD_GROUP, "GIF-hud", "Displays a gif.", GIF::new);
 
-    public UWU() {
+    public GIF() {
         super(INFO);
     }
 
     private final SettingGroup sg = settings.getDefaultGroup();
 
-    private final Setting<Integer> size = sg.add(new IntSetting.Builder()
+    private final Setting<Double> size = sg.add(new DoubleSetting.Builder()
         .name("size")
         .description("how big.")
-        .defaultValue(5)
-        .min(1)
-        .sliderMin(1)
-        .sliderMax(10)
+        .defaultValue(1.0)
+        .min(0.5)
+        .max(10.0)
+        .sliderRange(0.5, 10.0)
+        .decimalPlaces(1)
         .build()
     );
+
+    private final Setting<Double> width = sg.add(new DoubleSetting.Builder()
+        .name("width")
+        .description("Stretch the cat in the x axis.")
+        .defaultValue(5.0)
+        .min(0.5)
+        .max(10.0)
+        .sliderRange(0.5, 10.0)
+        .decimalPlaces(1)
+        .build()
+    );
+
+
+    private final Setting<Double> height = sg.add(new DoubleSetting.Builder()
+        .name("height")
+        .description("Stretch the cat in the y axis.")
+        .defaultValue(5.0)
+        .min(0.5)
+        .max(10.0)
+        .sliderRange(0.5, 10.0)
+        .decimalPlaces(1)
+        .build()
+    );
+
+    private final Setting<gifs> mode = sg.add(new EnumSetting.Builder<gifs>()
+        .name("gifs")
+        .description("set the gif you want.")
+        .defaultValue(gifs.uwu)
+        .build()
+    );
+
+    private String gifPath;
+    private Identifier textureId;
+    private String currentFile;
+
+    public enum gifs {
+        uwu, cat, meow1, meow2
+    }
 
     private final List<int[]> frames = new ArrayList<>();
     private final List<Integer> frameDelaysMs = new ArrayList<>();
@@ -59,19 +97,49 @@ public class UWU extends HudElement {
 
     @Override
     public void render(HudRenderer renderer) {
-        int n = size.get();
-        setSize(64 * n, 64 * n);
+        String file = "";
+        switch (mode.get()) {
+            case uwu   -> file = "blush-anime.gif";
+            case cat   -> file = "cat-patting.gif";
+            case meow1 -> file = "meow1.gif";
+            case meow2 -> file = "meow2.gif";
+        }
+        gifPath   = "/assets/" + space + "/gif/" + file;
+        textureId = Identifier.fromNamespaceAndPath(space, "gif/" + file);
+
+        if (!file.equals(currentFile)) {
+            reset();
+            currentFile = file;
+        }
+
+        double n = size.get();
+        double x_width = width.get();
+        double y_height = height.get();
+        setSize(64 * n * x_width, 64 * n * y_height);
 
         if (!loaded && !loadFailed) load();
         if (loadFailed) return;
 
         tick();
-        renderer.texture(TEXTURE_ID, x, y, getWidth(), getHeight(), Color.WHITE);
+        renderer.texture(textureId, x, y, getWidth(), getHeight(), Color.WHITE);
+    }
+
+    private void reset() {
+        if (texture != null) {
+            Minecraft.getInstance().getTextureManager().release(textureId);
+            texture.close();
+            texture = null;
+        }
+        frames.clear();
+        frameDelaysMs.clear();
+        frameIndex = 0;
+        loaded = false;
+        loadFailed = false;
     }
 
     private void load() {
-        try (InputStream in = UWU.class.getResourceAsStream(GIF_PATH)) {
-            if (in == null) throw new IOException("Couldn't find " + GIF_PATH + " on the classpath");
+        try (InputStream in = GIF.class.getResourceAsStream(gifPath)) {
+            if (in == null) throw new IOException("Couldn't find " + gifPath + " on the classpath");
             try (GifImageReader reader = new GifImageReader(in, true)) {
                 gifWidth = reader.getMetadata().getWidth();
                 gifHeight = reader.getMetadata().getHeight();
@@ -88,13 +156,13 @@ public class UWU extends HudElement {
                 }
             }
 
-            if (frames.isEmpty()) throw new IOException("No frames decoded from " + GIF_PATH);
+            if (frames.isEmpty()) throw new IOException("No frames decoded from " + gifPath);
 
             NativeImage image = new NativeImage(NativeImage.Format.RGBA, gifWidth, gifHeight, false);
             writeFrame(image, 0);
 
             texture = new DynamicTexture(() -> "uwu-blush-anime", image);
-            Minecraft.getInstance().getTextureManager().register(TEXTURE_ID, texture);
+            Minecraft.getInstance().getTextureManager().register(textureId, texture);
 
             frameIndex = 0;
             frameDeadline = System.currentTimeMillis() + frameDelaysMs.getFirst();
