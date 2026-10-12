@@ -37,6 +37,9 @@ public class KawaiiAddon extends MeteorAddon {
         Modules.get().add(new OnDeathSFX());
         Modules.get().add(new ActionBarCensor());
         Modules.get().add(new PacketEat());
+        //wip
+        //Modules.get().add(new BowInstaPop());
+        //Modules.get().add(new AutoMeow());
 
         // Commands
         Commands.add(new Cuddle());
