@@ -40,6 +40,7 @@ public class KawaiiAddon extends MeteorAddon {
         //wip
         //Modules.get().add(new BowInstaPop());
         //Modules.get().add(new AutoMeow());
+        Modules.get().add(new StupidSprint());
 
         // Commands
         Commands.add(new Cuddle());
