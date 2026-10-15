@@ -42,7 +42,15 @@ A **Meteor Client addon** for Minecraft 26.x that displays **catgirl images** + 
 
 ---
 
-## Features 🌟
+## Showcase 
+
+<p align="center">
+  <img src="screenshots/owo.gif" alt="Kawaii Addon showcase" width="800">
+</p>
+
+---
+
+## Features 
 
     Hud :
       - Cat = shows catgirl images.
@@ -75,7 +83,8 @@ A **Meteor Client addon** for Minecraft 26.x that displays **catgirl images** + 
 
 ---
 
-## Installation ⚡
+
+## Installation 
 
 1. Make sure you have **Meteor Client** installed  
 2. Download the latest `.jar` from the [Releases](https://github.com/turtlegamerw/kawaii-addon-_V2-real/releases) page  
@@ -84,7 +93,7 @@ A **Meteor Client addon** for Minecraft 26.x that displays **catgirl images** + 
 
 ---
 
-## Development 🛠️
+## Development 🛠
 
 To build the addon locally:
 
