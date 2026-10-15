@@ -37,6 +37,7 @@ public class KawaiiAddon extends MeteorAddon {
         Modules.get().add(new OnDeathSFX());
         Modules.get().add(new ActionBarCensor());
         Modules.get().add(new PacketEat());
+        Modules.get().add(new StupidSprint());
 
         // Commands
         Commands.add(new Cuddle());
@@ -50,7 +51,7 @@ public class KawaiiAddon extends MeteorAddon {
         Hud.get().register(Cat.INFO);
         Hud.get().register(WaterMark.INFO);
         Hud.get().register(PlayerSeekerHud.INFO);
-        Hud.get().register(UWU.INFO);
+        Hud.get().register(GIF.INFO);
     }
 
     @Override
