@@ -3,14 +3,14 @@ mod-version = "1.10"
 
 # Fabric (https://fabricmc.net/develop)
 jdk = "25"
-minecraft = "26.2"
+minecraft = "26.3"
 fabric-loader = "0.19.5"
 
 # Loom (https://github.com/FabricMC/fabric-loom)
-loom = "1.17-SNAPSHOT"
+loom = "1.18-SNAPSHOT"
 
 # Meteor (https://github.com/MeteorDevelopment/meteor-client/)
-meteor = "26.2-SNAPSHOT"
+meteor = "26.3-SNAPSHOT"
 
 # GIF Reader (https://github.com/ribasco/gif-reader)
 gif = "1.1.0"
