@@ -9,6 +9,7 @@
     "DebugHudMixin",
     "LoadingOverlayMixin",
     "MapRendererMixin",
+    "MultiPlayerGameModeAccessor",
     "meteor.FriendsMixin"
   ],
   "injectors": {
