@@ -39,7 +39,7 @@ public class KawaiiAddon extends MeteorAddon {
         Modules.get().add(new PacketEat());
         //wip
         //Modules.get().add(new BowInstaPop());
-        //Modules.get().add(new AutoMeow());
+        Modules.get().add(new AutoMeow());
         Modules.get().add(new StupidSprint());
         Modules.get().add(new Perfect180());
 
