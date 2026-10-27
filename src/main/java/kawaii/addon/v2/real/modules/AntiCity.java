@@ -183,6 +183,23 @@ public class AntiCity extends Module {
         .build()
     );
 
+    private final Setting<Boolean> realBedrockMining = sgMining.add(new BoolSetting.Builder()
+        .name("real-bedrock-mining")
+        .description("Mines bedrock-id blocks normally with a fixed timer instead of the bedrock exploit. Use for custom blocks that look like bedrock but are breakable.")
+        .defaultValue(false)
+        .build()
+    );
+
+    private final Setting<Integer> realBedrockTicks = sgMining.add(new IntSetting.Builder()
+        .name("real-bedrock-ticks")
+        .description("Ticks to wait before sending the stop packet. Must match the server's custom block hardness.")
+        .defaultValue(20)
+        .min(1)
+        .sliderMax(200)
+        .visible(realBedrockMining::get)
+        .build()
+    );
+
     private final Setting<Boolean> render = sgRender.add(new BoolSetting.Builder()
         .name("render")
         .defaultValue(true)
@@ -298,8 +315,10 @@ public class AntiCity extends Module {
             return;
         }
 
-        if (state.is(Blocks.BEDROCK)) {
+        if (bedrockTarget) {
             progress = damage.get();
+        } else if (state.is(Blocks.BEDROCK)) {
+            progress += damage.get() / realBedrockTicks.get();
         } else {
             progress += BlockUtils.getBreakDelta(slot, state);
         }
@@ -315,7 +334,7 @@ public class AntiCity extends Module {
         wasAir = false;
         sinceSend = 1000;
         assert mc.level != null;
-        bedrockTarget = mc.level.getBlockState(pos).is(Blocks.BEDROCK);
+        bedrockTarget = mc.level.getBlockState(pos).is(Blocks.BEDROCK) && !realBedrockMining.get();
 
         if (grimDelay.get() > 0) {
             startPending = true;
