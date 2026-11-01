@@ -21,7 +21,7 @@
 </a>
 
 <a href="https://minecraft.wiki/w/Java_Edition_version_history">
-<img src="https://img.shields.io/badge/MC%20Version-26.2-orange" alt="Minecraft Version">
+<img src="https://img.shields.io/badge/MC%20Version-26.3-orange" alt="Minecraft Version">
 </a>
 
 <a href="https://meteoraddons.com/">
