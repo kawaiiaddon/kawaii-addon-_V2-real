@@ -42,7 +42,6 @@ public class KawaiiAddon extends MeteorAddon {
         Modules.get().add(new AutoMeow());
         Modules.get().add(new StupidSprint());
         Modules.get().add(new Perfect180());
-        Modules.get().add(new AntiCity());
 
         // Commands
         Commands.add(new Cuddle());
