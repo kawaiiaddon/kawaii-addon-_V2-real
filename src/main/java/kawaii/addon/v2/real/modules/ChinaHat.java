@@ -3,6 +3,8 @@ package kawaii.addon.v2.real.modules;
 //made by capman_505 on dc.(ai generated for sure)
 //but we ball
 
+//who tf even uses this? -turtle
+
 import kawaii.addon.v2.real.KawaiiAddon;
 import meteordevelopment.meteorclient.events.render.Render3DEvent;
 import meteordevelopment.meteorclient.settings.*;

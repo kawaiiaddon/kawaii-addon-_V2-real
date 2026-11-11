@@ -64,7 +64,7 @@ public class AntiWeb extends Module {
     private boolean swapped = false;
 
     public AntiWeb() {
-        super(KawaiiAddon.CATEGORY, "AntiWeb", "funny packet mine module because NoSlow not work for some reason on servers that use grim ac fucking retards.");
+        super(KawaiiAddon.CATEGORY, "AntiWeb", "funny packet mine module because NoSlow not work for some reason on servers that use NCP ac fucking retards.");
     }
 
     @Override

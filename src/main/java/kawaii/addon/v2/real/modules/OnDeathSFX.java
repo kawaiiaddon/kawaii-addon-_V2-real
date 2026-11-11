@@ -30,7 +30,7 @@ public class OnDeathSFX extends Module {
             .name("death-sound")
             .description("funny sounds.")
             .defaultValue(DeathSound.FAHHH)
-            .visible(() -> !random.get()) // 👈 hide when random = true
+            .visible(() -> !random.get()) //hide when random = true       fuck ass ai comment...
             .build()
     );
 

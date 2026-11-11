@@ -7,7 +7,7 @@ import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.orbit.EventHandler;
 import net.minecraft.world.level.Level;
 import meteordevelopment.meteorclient.events.world.TickEvent;
-
+//patched on 6b :( i think soooooo imma keep the code and just not register it :3
 public class RockBreaker extends Module {
 
     public RockBreaker() {

@@ -30,18 +30,18 @@ public class KawaiiAddon extends MeteorAddon {
         Modules.get().add(new Cape());
         Modules.get().add(new MapCensor());
         Modules.get().add(new Troll());
-        Modules.get().add(new RockBreaker());
         Modules.get().add(new CoordSpoofer());
         Modules.get().add(new AntiWeb());
         Modules.get().add(new SwordSwap());
         Modules.get().add(new OnDeathSFX());
-        Modules.get().add(new ActionBarCensor());
         Modules.get().add(new PacketEat());
-        //wip
-        //Modules.get().add(new BowInstaPop());
         Modules.get().add(new AutoMeow());
         Modules.get().add(new StupidSprint());
         Modules.get().add(new Perfect180());
+        //patched
+        //Modules.get().add(new RockBreaker());
+        //wip
+        //Modules.get().add(new BowInstaPop());
 
         // Commands
         Commands.add(new Cuddle());

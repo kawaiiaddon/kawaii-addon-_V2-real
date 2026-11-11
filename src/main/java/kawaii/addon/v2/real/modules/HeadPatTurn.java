@@ -24,7 +24,7 @@ public class HeadPatTurn extends Module {
 
     private final Setting<Integer> speed = sg.add(new IntSetting.Builder()
         .name("speed")
-        .defaultValue(10)
+        .defaultValue(30)
         .min(1)
         .sliderMax(100)
         .build()

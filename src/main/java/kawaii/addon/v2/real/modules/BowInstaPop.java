@@ -9,7 +9,7 @@ import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.orbit.EventHandler;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.BowItem;
-
+// claude fix pls
 public class BowInstaPop extends Module {
 
     public BowInstaPop() {
