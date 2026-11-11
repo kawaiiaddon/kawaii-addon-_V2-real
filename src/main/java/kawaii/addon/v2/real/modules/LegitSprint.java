@@ -9,10 +9,12 @@ import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.orbit.EventHandler;
 import meteordevelopment.orbit.EventPriority;
 //why :sob:
-public class StupidSprint extends Module {
 
-    public StupidSprint() {
-        super(KawaiiAddon.CATEGORY, "StupidSprint", "Bad AutoSprint Module");
+//why huh? meteor client auto-sprint is kinda to blatant.
+public class LegitSprint extends Module {
+
+    public LegitSprint() {
+        super(KawaiiAddon.CATEGORY, "LegitSprint", "Bad AutoSprint Module");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
