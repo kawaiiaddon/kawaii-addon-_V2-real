@@ -8,6 +8,8 @@
     "DebugHudMixin",
     "LoadingOverlayMixin",
     "MapRendererMixin",
+    "TitleScreenMixin",
+    "accessor.AbstractTextureAccessor",
     "meteor.FriendsMixin"
   ],
   "injectors": {
