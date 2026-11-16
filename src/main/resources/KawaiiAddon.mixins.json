@@ -5,6 +5,7 @@
   "client": [
     "AbstractClientPlayerEntityMixin",
     "CapeLayerMixin",
+    "ClientPacketListenerMixin",
     "DebugHudMixin",
     "LoadingOverlayMixin",
     "MapRendererMixin",

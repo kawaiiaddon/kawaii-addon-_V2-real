@@ -39,6 +39,7 @@ public class KawaiiAddon extends MeteorAddon {
         Modules.get().add(new LegitSprint());
         Modules.get().add(new Perfect180());
         Modules.get().add(new KawaiiTweaks());
+        Modules.get().add(new ActionBarCensor());
         //patched
         //Modules.get().add(new RockBreaker());
         //wip
