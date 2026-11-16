@@ -9,6 +9,7 @@
     "InGameHudMixin",
     "LoadingOverlayMixin",
     "MapRendererMixin",
+    "TitleScreenMixin",
     "meteor.FriendsMixin"
   ],
   "injectors": {

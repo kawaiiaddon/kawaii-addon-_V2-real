@@ -63,8 +63,8 @@ public class Troll extends Module {
             Sound[] values = Sound.values();
             soundToPlay = values[ThreadLocalRandom.current().nextInt(values.length)];
 
-                double volume = 1.0;
-                double pitch = 1.0;
+            double volume = 1.0;
+            double pitch = 1.0;
 
             mc.getSoundManager().play(
                 SimpleSoundInstance.forUI(
