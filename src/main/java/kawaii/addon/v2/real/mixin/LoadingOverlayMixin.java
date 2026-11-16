@@ -1,37 +1,34 @@
 package kawaii.addon.v2.real.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import kawaii.addon.v2.real.modules.KawaiiTweaks;
+import meteordevelopment.meteorclient.systems.modules.Modules;
 import net.minecraft.client.gui.screens.LoadingOverlay;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(LoadingOverlay.class)
 public class LoadingOverlayMixin {
 
-    //red
-    @ModifyConstant(
-        method = "<clinit>",
-        constant = @Constant(intValue = 239)
+    @ModifyExpressionValue(
+        method = "extractRenderState",
+        at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/function/IntSupplier;getAsInt()I"
+        )
     )
-    private static int modifyLightRed(int original) {
-        return 200;
-    }
 
-    //green
-    @ModifyConstant(
-        method = "<clinit>",
-        constant = @Constant(intValue = 50)
-    )
-    private static int modifyLightGreen(int original) {
-        return 0;
-    }
+    //Couldn't find a better way so it might be scuffed when launching the game but after that it's fine.
+    private int kawaii$modifyBrandBackground(int original) {
+        Modules modules = Modules.get();
+        if (modules == null) return original;
 
-    //blue
-    @ModifyConstant(
-        method = "<clinit>",
-        constant = @Constant(intValue = 61)
-    )
-    private static int modifyLightBlue(int original) {
-        return 255;
+        KawaiiTweaks t = modules.get(KawaiiTweaks.class);
+        if (t == null) return original;
+
+        if (t.lToggle()) {
+            return 0xFFC800FF;
+        }
+        return original;
     }
 }

@@ -3,10 +3,7 @@ package kawaii.addon.v2.real.util;
 import com.ibasco.image.gif.GifFrame;
 import com.ibasco.image.gif.GifImageReader;
 import com.mojang.blaze3d.platform.NativeImage;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.logging.LogUtils;
-import com.mojang.renderpearl.api.textures.FilterMode;
-import kawaii.addon.v2.real.mixin.accessor.AbstractTextureAccessor;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.DynamicTexture;
@@ -86,9 +83,6 @@ public final class BackGroundUtil {
             writeFrame(image, 0);
 
             texture = new DynamicTexture(() -> "kawaii-bg", image);
-            ((AbstractTextureAccessor) texture).setSampler(
-                RenderSystem.getSamplerCache().getRepeat(FilterMode.LINEAR)
-            );
             mc.getTextureManager().register(VIDEO_TEXTURE, texture);
 
             frameIndex    = 0;
