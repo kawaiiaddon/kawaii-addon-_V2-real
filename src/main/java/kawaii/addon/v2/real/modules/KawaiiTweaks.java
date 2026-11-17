@@ -10,7 +10,6 @@ public class KawaiiTweaks extends Module {
 
     public KawaiiTweaks() {
         super(KawaiiAddon.CATEGORY, "KawaiiTweaks", "Mange tweaks in kawaii-addon.");
-        enable();
     }
 
     private final SettingGroup sg = settings.getDefaultGroup();
