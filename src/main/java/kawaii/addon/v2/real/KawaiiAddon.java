@@ -4,15 +4,22 @@ import kawaii.addon.v2.real.commands.*;
 import kawaii.addon.v2.real.hud.*;
 import kawaii.addon.v2.real.modules.*;
 import com.mojang.logging.LogUtils;
+import meteordevelopment.meteorclient.MeteorClient;
 import meteordevelopment.meteorclient.addons.GithubRepo;
 import meteordevelopment.meteorclient.addons.MeteorAddon;
 import meteordevelopment.meteorclient.commands.Commands;
+import meteordevelopment.meteorclient.events.world.TickEvent;
 import meteordevelopment.meteorclient.systems.hud.Hud;
 import meteordevelopment.meteorclient.systems.hud.HudGroup;
 import meteordevelopment.meteorclient.systems.modules.Category;
+import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.meteorclient.systems.modules.Modules;
+import meteordevelopment.orbit.EventHandler;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.world.item.Items;
 import org.slf4j.Logger;
+
+import java.io.File;
 
 public class KawaiiAddon extends MeteorAddon {
     public static final Logger LOG = LogUtils.getLogger();
@@ -58,6 +65,14 @@ public class KawaiiAddon extends MeteorAddon {
         Hud.get().register(WaterMark.INFO);
         Hud.get().register(PlayerSeekerHud.INFO);
         Hud.get().register(GIF.INFO);
+
+        File kawaiiFolder = new File(FabricLoader.getInstance().getGameDir().toFile(), "kawaii-addon");
+
+        if (!kawaiiFolder.exists()) {
+            kawaiiFolder.mkdirs();
+            LOG.info("First start-up detected.");
+            MeteorClient.EVENT_BUS.subscribe(this);
+        }
     }
 
     @Override
@@ -73,5 +88,17 @@ public class KawaiiAddon extends MeteorAddon {
     @Override
     public GithubRepo getRepo() {
         return new GithubRepo("kawaiiaddon", "kawaii-addon-_V2-real");
+    }
+
+    @SuppressWarnings("unused")
+    @EventHandler
+    private void onFirstTick(TickEvent.Post event) {
+        MeteorClient.EVENT_BUS.unsubscribe(this);
+
+        Module tweaks = Modules.get().get(KawaiiTweaks.class);
+        if (!tweaks.isActive()) {
+            tweaks.toggle();
+            LOG.info("Enabled KawaiiTweaks for the first time.");
+        }
     }
 }
