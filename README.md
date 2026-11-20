@@ -56,7 +56,7 @@ A **Meteor Client addon** for Minecraft 26.x that displays **catgirl images** + 
       - Cat = shows catgirl images.
       - Watermark = shows a watermark.
       - PlayerSeekerHud = shows info from nearby players.
-      - UwU-hud = Testing gifs.
+      - GIF = Displays a gif.
 
     Commands :
       - FakeDupe = does nothing useful. 
@@ -73,13 +73,16 @@ A **Meteor Client addon** for Minecraft 26.x that displays **catgirl images** + 
       - HeadPatTurn = makes you spin. 
       - MapCensor = censors maps.
       - Troll = i forgot what this does.
-      - RockBreaker = break bedrock on some servers.
       - AntiWeb = automatically break cobwebs.
       - CoordSpoofer = spoof your coords in f3 menu. 
       - OnDeathSFX = play a sound effect when you die (in game). 
       - SwordSwap = test module for testing silent item swap.
       - ActionBarCensor = Hides the 2b2t.org message.
       - PacketEat = Packets are yummy.
+      - AutoMeow = Whispers a message to the closest player.
+      - LegitSprint = Bad AutoSprint Module.
+      - Perfect180 = Razer basilisk v4 pro mouse at home.
+      - KawaiiTweaks = Mange tweaks in kawaii-addon.
 
 ---
 

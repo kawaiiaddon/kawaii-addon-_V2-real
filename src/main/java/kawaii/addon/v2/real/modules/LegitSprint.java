@@ -14,7 +14,7 @@ import meteordevelopment.orbit.EventPriority;
 public class LegitSprint extends Module {
 
     public LegitSprint() {
-        super(KawaiiAddon.CATEGORY, "LegitSprint", "Bad AutoSprint Module");
+        super(KawaiiAddon.CATEGORY, "LegitSprint", "Bad AutoSprint Module.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
