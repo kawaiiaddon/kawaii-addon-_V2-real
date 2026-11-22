@@ -26,11 +26,21 @@ public class KawaiiTweaks extends Module {
         .build()
     );
 
+    private final Setting<Boolean> wm = sg.add(new BoolSetting.Builder()
+        .name("WaterMark")
+        .defaultValue(true)
+        .build()
+    );
+
     public boolean bgToggle() {
         return isActive() && bg.get();
     }
 
     public boolean lToggle() {
         return isActive() && ls.get();
+    }
+
+    public boolean wmToggle() {
+        return !isActive() && wm.get();
     }
 }

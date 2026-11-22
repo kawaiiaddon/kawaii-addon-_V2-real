@@ -7,9 +7,11 @@
     "CapeLayerMixin",
     "ClientPacketListenerMixin",
     "DebugHudMixin",
+    "InventoryScreenMixin",
     "LoadingOverlayMixin",
     "MapRendererMixin",
-    "TitleScreenMixin",
+    "PanoramaMixin",
+    "PauseScreenMixin",
     "meteor.FriendsMixin"
   ],
   "injectors": {

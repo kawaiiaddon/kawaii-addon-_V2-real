@@ -47,10 +47,7 @@ public class KawaiiAddon extends MeteorAddon {
         Modules.get().add(new Perfect180());
         Modules.get().add(new KawaiiTweaks());
         Modules.get().add(new ActionBarCensor());
-        //patched
-        //Modules.get().add(new RockBreaker());
-        //wip
-        //Modules.get().add(new BowInstaPop());
+        Modules.get().add(new BowInstaPop());
 
         // Commands
         Commands.add(new Cuddle());
