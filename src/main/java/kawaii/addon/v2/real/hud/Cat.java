@@ -2,9 +2,7 @@ package kawaii.addon.v2.real.hud;
 
 import kawaii.addon.v2.real.KawaiiAddon;
 import meteordevelopment.meteorclient.settings.*;
-import meteordevelopment.meteorclient.systems.hud.HudElement;
-import meteordevelopment.meteorclient.systems.hud.HudElementInfo;
-import meteordevelopment.meteorclient.systems.hud.HudRenderer;
+import meteordevelopment.meteorclient.systems.hud.*;
 import meteordevelopment.meteorclient.utils.render.color.Color;
 import net.minecraft.resources.Identifier;
 
@@ -13,125 +11,100 @@ import static kawaii.addon.v2.real.util.FilePath.space;
 public class Cat extends HudElement {
     public static final HudElementInfo<Cat> INFO = new HudElementInfo<>(KawaiiAddon.HUD_GROUP, "cat-hud", "Displays a cat icon.", Cat::new);
 
-    static final int imgTotal = 51;
-
-    private static final Identifier[] TEXTURES = new Identifier[imgTotal];
-
-    static {
-        for (int i = 0; i < TEXTURES.length; i++) {
-            TEXTURES[i] = Identifier.fromNamespaceAndPath(space, "hud/cat" + (i + 1) + ".png");
-        }
-    }
-
     public Cat() {
         super(INFO);
     }
 
+    private final int images = CatImage.values().length;
+
     private final SettingGroup sg = settings.getDefaultGroup();
 
-    private final Setting<Double> size = sg.add(new DoubleSetting.Builder()
-        .name("size")
-        .description("set how big the cat is.")
-        .defaultValue(1.0)
-        .min(0.5)
-        .max(10.0)
-        .sliderRange(0.5, 10.0)
-        .decimalPlaces(1)
+    private final Setting<Double> scale = sg.add(new DoubleSetting.Builder()
+        .name("Scale")
+        .defaultValue(1)
+        .min(0)
+        .sliderRange(0, 10)
         .build()
     );
 
-    private final Setting<Double> width = sg.add(new DoubleSetting.Builder()
-        .name("width")
-        .description("Stretch the cat in the x axis.")
-        .defaultValue(5.0)
-        .min(0.5)
-        .max(10.0)
-        .sliderRange(0.5, 10.0)
-        .decimalPlaces(1)
+    private final Setting<Double> scaleY = sg.add(new DoubleSetting.Builder()
+        .name("Scale Height")
+        .defaultValue(1)
+        .min(0)
+        .sliderRange(0, 10)
         .build()
     );
 
-    private final Setting<Double> height = sg.add(new DoubleSetting.Builder()
-        .name("height")
-        .description("Stretch the cat in the y axis.")
-        .defaultValue(5.0)
-        .min(0.5)
-        .max(10.0)
-        .sliderRange(0.5, 10.0)
-        .decimalPlaces(1)
+    private final Setting<Double> scaleX = sg.add(new DoubleSetting.Builder()
+        .name("Scale Width")
+        .defaultValue(1)
+        .min(0)
+        .sliderRange(0, 10)
+        .build()
+    );
+
+    private final Setting<SetMode> mode = sg.add(new EnumSetting.Builder<SetMode>()
+        .name("IMG selector-type")
+        .defaultValue(SetMode.Enum)
+        .build()
+    );
+
+    private final Setting<Integer> sliderSet = sg.add(new IntSetting.Builder()
+        .name("IMG selector")
+        .defaultValue(1)
+        .min(1)
+        .sliderRange(1, images)
+        .visible(() -> mode.get() == SetMode.Slider)
+        .build()
+    );
+
+    private final Setting<CatImage> enumSet = sg.add(new EnumSetting.Builder<CatImage>()
+        .name("IMG enum")
+        .defaultValue(CatImage.Cat1)
+        .visible(() -> mode.get() == SetMode.Enum)
         .build()
     );
 
     public enum SetMode {
-        Modern, OG
+        Slider, Enum
     }
 
-    private final Setting<SetMode> modes = sg.add(new EnumSetting.Builder<SetMode>()
-        .name("Picture select mode")
-        .description("Which method you want to use for selecting a catgirl.")
-        .defaultValue(SetMode.Modern)
-        .build()
-    );
+    public enum CatImage {
+        Cat1(1), Cat2(2), Cat3(3), Cat4(4),
+        Cat5(5), Cat6(6), Cat7(7), Cat8(8),
+        Cat9(9), Cat10(10), Cat11(11), Cat12(12),
+        Cat13(13), Cat14(14), Cat15(15), Cat16(16),
+        Cat17(17), Cat18(18), Cat19(19), Cat20(20),
+        Cat21(21), Cat22(22), Cat23(23), Cat24(24),
+        Cat25(25), Cat26(26), Cat27(27), Cat28(28),
+        Cat29(29), Cat30(30), Cat31(31), Cat32(32),
+        Cat33(33), Cat34(34), Cat35(35), Cat36(36),
+        Cat37(37), Cat38(38), Cat39(39), Cat40(40),
+        Cat41(41), Cat42(42), Cat43(43), Cat44(44),
+        Cat45(45), Cat46(46), Cat47(47), Cat48(48),
+        Cat49(49), Cat50(50), Cat51(51);
 
-    private final Setting<Picture> mode = sg.add(new EnumSetting.Builder<Picture>()
-        .name("picture")
-        .description("set the picture you want.")
-        .defaultValue(Picture.Cat1)
-        .visible(() -> modes.get() == SetMode.Modern)
-        .build()
-    );
+        public final int index;
 
-    public enum Picture {
-        Cat1, Cat2, Cat3, Cat4, Cat5, Cat6,
-        Cat7, Cat8, Cat9, Cat10, Cat11, Cat12,
-        Cat13, Cat14, Cat15, Cat16, Cat17, Cat18,
-        Cat19, Cat20, Cat21, Cat22, Cat23, Cat24,
-        Cat25, Cat26, Cat27, Cat28, Cat29, Cat30,
-        Cat31, Cat32, Cat33, Cat34, Cat35, Cat36,
-        Cat37, Cat38, Cat39, Cat40, Cat41, Cat42,
-        Cat43, Cat44, Cat45, Cat46, Cat47, Cat48,
-        Cat49, Cat50, Cat51
-    }
-
-    private final Setting<Integer> picture = sg.add(new IntSetting.Builder()
-        .name("og-picture")
-        .description("Select different pictures of catgirls.")
-        .defaultValue(1)
-        .min(1)
-        .max(imgTotal)
-        .sliderRange(1, imgTotal)
-        .visible(() -> modes.get() == SetMode.OG)
-        .build()
-    );
-
-    @Override
-    public void render(HudRenderer renderer) {
-        switch (modes.get()) {
-            case Modern -> ModernRender(renderer);
-            case OG -> OGRender(renderer);
+        CatImage(int index) {
+            this.index = index;
         }
     }
 
-    private void ModernRender(HudRenderer renderer) {
-        int index = mode.get().ordinal();
-        if (index >= TEXTURES.length) index = 0;
-
-        drawTexture(renderer, TEXTURES[index]);
+    private int getIndex() {
+        return switch (mode.get()) {
+            case Slider -> sliderSet.get();
+            case Enum -> enumSet.get().index;
+        };
     }
 
-    private void OGRender(HudRenderer renderer) {
-        int index = picture.get() - 1;
-        if (index < 0 || index >= TEXTURES.length) index = 0;
-
-        drawTexture(renderer, TEXTURES[index]);
+    private Identifier getImage() {
+        return Identifier.fromNamespaceAndPath(space, "hud/cat" + getIndex() + ".png");
     }
 
-    private void drawTexture(HudRenderer renderer, Identifier texture) {
-        double n = size.get();
-        double x_width = width.get();
-        double y_height = height.get();
-        setSize(64 * n * x_width, 64 * n * y_height);
-
-        renderer.texture(texture, x, y, getWidth(), getHeight(), Color.WHITE);
+    @Override
+    public void render(HudRenderer renderer) {
+        setSize(64 * scale.get() * scaleX.get(), 64 * scale.get() * scaleY.get());
+        renderer.texture(getImage(), getX(), getY(), getWidth(), getHeight(), Color.WHITE);
     }
 }
