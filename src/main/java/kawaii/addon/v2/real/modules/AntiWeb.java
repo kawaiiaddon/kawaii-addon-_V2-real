@@ -5,6 +5,7 @@ import kawaii.addon.v2.real.util.SwapUtil;
 import meteordevelopment.meteorclient.events.world.TickEvent;
 import meteordevelopment.meteorclient.settings.*;
 import meteordevelopment.meteorclient.systems.modules.Module;
+import meteordevelopment.meteorclient.utils.player.Rotations;
 import meteordevelopment.orbit.EventHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -13,6 +14,7 @@ import net.minecraft.network.protocol.game.ServerboundSetCarriedItemPacket;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +27,8 @@ public class AntiWeb extends Module {
         Silent,
         None
     }
+
+    private static final int ROTATION_PRIORITY = 50;
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
@@ -50,6 +54,12 @@ public class AntiWeb extends Module {
         .defaultValue(10)
         .min(1)
         .sliderMax(20)
+        .build()
+    );
+
+    private final Setting<Boolean> rotate = sgGeneral.add(new BoolSetting.Builder()
+        .name("rotate")
+        .defaultValue(false)
         .build()
     );
 
@@ -108,21 +118,13 @@ public class AntiWeb extends Module {
 
             Direction face = getClosestFace(pos);
 
-            if (swapMode.get() == SwapMode.Silent && swordSlot != -1 && swordSlot != oldSlot) {
-                mc.getConnection().send(new ServerboundSetCarriedItemPacket(swordSlot));
-            } else if (swapMode.get() == SwapMode.Normal && swordSlot != -1) {
-                mc.player.getInventory().setSelectedSlot(swordSlot);
-            }
+            Runnable mine = () -> mineWeb(pos, face, swordSlot, oldSlot);
 
-            mc.getConnection().send(new ServerboundPlayerActionPacket(
-                ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK, pos, face, 0
-            ));
-            mc.getConnection().send(new ServerboundPlayerActionPacket(
-                ServerboundPlayerActionPacket.Action.STOP_DESTROY_BLOCK, pos, face, 0
-            ));
-
-            if (swapMode.get() == SwapMode.Silent && swordSlot != -1 && swordSlot != oldSlot) {
-                mc.getConnection().send(new ServerboundSetCarriedItemPacket(oldSlot));
+            if (rotate.get()) {
+                Vec3 target = Vec3.atCenterOf(pos);
+                Rotations.rotate(Rotations.getYaw(target), Rotations.getPitch(target), ROTATION_PRIORITY, mine);
+            } else {
+                mine.run();
             }
 
             minedCooldowns.put(pos, RETRY_COOLDOWN.get().intValue());
@@ -132,6 +134,27 @@ public class AntiWeb extends Module {
         if (broke > 0) {
             restoreIfSwapped();
             if (notify.get()) info("Broke " + broke + " cobweb(s).");
+        }
+    }
+
+    private void mineWeb(BlockPos pos, Direction face, int swordSlot, int oldSlot) {
+        if (mc.player == null || mc.getConnection() == null) return;
+
+        if (swapMode.get() == SwapMode.Silent && swordSlot != -1 && swordSlot != oldSlot) {
+            mc.getConnection().send(new ServerboundSetCarriedItemPacket(swordSlot));
+        } else if (swapMode.get() == SwapMode.Normal && swordSlot != -1) {
+            mc.player.getInventory().setSelectedSlot(swordSlot);
+        }
+
+        mc.getConnection().send(new ServerboundPlayerActionPacket(
+            ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK, pos, face, 0
+        ));
+        mc.getConnection().send(new ServerboundPlayerActionPacket(
+            ServerboundPlayerActionPacket.Action.STOP_DESTROY_BLOCK, pos, face, 0
+        ));
+
+        if (swapMode.get() == SwapMode.Silent && swordSlot != -1 && swordSlot != oldSlot) {
+            mc.getConnection().send(new ServerboundSetCarriedItemPacket(oldSlot));
         }
     }
 

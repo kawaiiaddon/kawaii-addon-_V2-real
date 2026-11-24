@@ -5,6 +5,7 @@
   "client": [
     "AbstractClientPlayerEntityMixin",
     "CapeLayerMixin",
+    "ChatScreenMixin",
     "ClientPacketListenerMixin",
     "DebugHudMixin",
     "InventoryScreenMixin",
