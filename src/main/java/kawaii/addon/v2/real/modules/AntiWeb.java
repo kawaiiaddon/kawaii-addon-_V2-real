@@ -7,18 +7,12 @@ import meteordevelopment.meteorclient.settings.*;
 import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.meteorclient.utils.player.Rotations;
 import meteordevelopment.orbit.EventHandler;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.core.*;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
-import net.minecraft.network.protocol.game.ServerboundSetCarriedItemPacket;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import net.minecraft.world.phys.*;
+import java.util.*;
 
 public class AntiWeb extends Module {
 
@@ -48,6 +42,15 @@ public class AntiWeb extends Module {
         .build()
     );
 
+    private final Setting<Double> breakThreshold = sgGeneral.add(new DoubleSetting.Builder()
+        .name("break-threshold")
+        .description("Progress before done.")
+        .defaultValue(0.72)
+        .min(0.5)
+        .sliderMax(1.0)
+        .build()
+    );
+
     private final Setting<Double> RETRY_COOLDOWN = sgGeneral.add(new DoubleSetting.Builder()
         .name("retry-cooldown")
         .description("Retries amount.")
@@ -73,6 +76,10 @@ public class AntiWeb extends Module {
     private final Map<BlockPos, Integer> minedCooldowns = new HashMap<>();
     private boolean swapped = false;
 
+    private BlockPos target = null;
+    private Direction targetFace = Direction.UP;
+    private int elapsed = 0;
+
     public AntiWeb() {
         super(KawaiiAddon.CATEGORY, "AntiWeb", "funny packet mine module because NoSlow not work for some reason on servers that use NCP ac fucking retards.");
     }
@@ -80,6 +87,8 @@ public class AntiWeb extends Module {
     @Override
     public void onDeactivate() {
         minedCooldowns.clear();
+        target = null;
+        elapsed = 0;
         restoreIfSwapped();
     }
 
@@ -91,71 +100,85 @@ public class AntiWeb extends Module {
         minedCooldowns.replaceAll((_, ticks) -> ticks - 1);
         minedCooldowns.entrySet().removeIf(e -> e.getValue() <= 0);
 
-        List<BlockPos> webs = findWebs();
-
-        if (webs.isEmpty()) {
-            restoreIfSwapped();
-            return;
+        if (target != null && !isWeb(target)) {
+            target = null;
+            elapsed = 0;
         }
 
-        int swordSlot = SwapUtil.findInHotbar(ItemTags.SWORDS);
-        int oldSlot = mc.player.getInventory().getSelectedSlot();
-        boolean canSwap = swapMode.get() != SwapMode.None && swordSlot != -1;
+        if (target == null) {
+            List<BlockPos> webs = findWebs();
+            webs.removeIf(minedCooldowns::containsKey);
 
-        if (canSwap && !swapped) {
-            if (swapMode.get() == SwapMode.Silent) {
-                SwapUtil.swapSilent(swordSlot);
-            } else {
-                SwapUtil.swapNormal(swordSlot);
+            if (webs.isEmpty()) {
+                restoreIfSwapped();
+                return;
             }
-            swapped = true;
+
+            Vec3 eye = mc.player.getEyePosition();
+            webs.sort(Comparator.comparingDouble(p -> Vec3.atCenterOf(p).distanceToSqr(eye)));
+
+            target = webs.get(0);
+            targetFace = getClosestFace(target);
+            elapsed = 0;
+
+            int swordSlot = SwapUtil.findInHotbar(ItemTags.SWORDS);
+            if (swapMode.get() != SwapMode.None && swordSlot != -1 && !swapped) {
+                if (swapMode.get() == SwapMode.Silent) SwapUtil.swapSilent(swordSlot);
+                else SwapUtil.swapNormal(swordSlot);
+                swapped = true;
+            }
+
+            BlockPos pos = target;
+            Direction face = targetFace;
+            runMaybeRotated(pos, () -> sendAction(ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK, pos, face));
+        } else {
+            elapsed++;
         }
 
-        int broke = 0;
-
-        for (BlockPos pos : webs) {
-            if (minedCooldowns.containsKey(pos)) continue;
-
-            Direction face = getClosestFace(pos);
-
-            Runnable mine = () -> mineWeb(pos, face, swordSlot, oldSlot);
-
-            if (rotate.get()) {
-                Vec3 target = Vec3.atCenterOf(pos);
-                Rotations.rotate(Rotations.getYaw(target), Rotations.getPitch(target), ROTATION_PRIORITY, mine);
-            } else {
-                mine.run();
-            }
+        float perTick = getProgressPerTick(target);
+        if (perTick > 0 && perTick * (elapsed + 1) >= breakThreshold.get()) {
+            BlockPos pos = target;
+            Direction face = targetFace;
+            runMaybeRotated(pos, () -> sendAction(ServerboundPlayerActionPacket.Action.STOP_DESTROY_BLOCK, pos, face));
 
             minedCooldowns.put(pos, RETRY_COOLDOWN.get().intValue());
-            broke++;
-        }
+            target = null;
+            elapsed = 0;
 
-        if (broke > 0) {
-            restoreIfSwapped();
-            if (notify.get()) info("Broke " + broke + " cobweb(s).");
+            if (notify.get()) info("Broke cobweb.");
         }
     }
 
-    private void mineWeb(BlockPos pos, Direction face, int swordSlot, int oldSlot) {
-        if (mc.player == null || mc.getConnection() == null) return;
-
-        if (swapMode.get() == SwapMode.Silent && swordSlot != -1 && swordSlot != oldSlot) {
-            mc.getConnection().send(new ServerboundSetCarriedItemPacket(swordSlot));
-        } else if (swapMode.get() == SwapMode.Normal && swordSlot != -1) {
-            mc.player.getInventory().setSelectedSlot(swordSlot);
+    private void runMaybeRotated(BlockPos pos, Runnable action) {
+        if (rotate.get()) {
+            Vec3 t = Vec3.atCenterOf(pos);
+            Rotations.rotate(Rotations.getYaw(t), Rotations.getPitch(t), ROTATION_PRIORITY, action);
+        } else {
+            action.run();
         }
+    }
 
-        mc.getConnection().send(new ServerboundPlayerActionPacket(
-            ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK, pos, face, 0
-        ));
-        mc.getConnection().send(new ServerboundPlayerActionPacket(
-            ServerboundPlayerActionPacket.Action.STOP_DESTROY_BLOCK, pos, face, 0
-        ));
+    private void sendAction(ServerboundPlayerActionPacket.Action action, BlockPos pos, Direction face) {
+        if (mc.getConnection() == null) return;
+        mc.getConnection().send(new ServerboundPlayerActionPacket(action, pos, face, 0));
+    }
 
-        if (swapMode.get() == SwapMode.Silent && swordSlot != -1 && swordSlot != oldSlot) {
-            mc.getConnection().send(new ServerboundSetCarriedItemPacket(oldSlot));
-        }
+    private float getProgressPerTick(BlockPos pos) {
+        if (mc.player == null || mc.level == null) return 0;
+
+        int swordSlot = SwapUtil.findInHotbar(ItemTags.SWORDS);
+        boolean useSword = swapMode.get() != SwapMode.None && swordSlot != -1;
+
+        var inv = mc.player.getInventory();
+        int old = inv.getSelectedSlot();
+        if (useSword) inv.setSelectedSlot(swordSlot);
+        float p = mc.level.getBlockState(pos).getDestroyProgress(mc.player, mc.level, pos);
+        if (useSword) inv.setSelectedSlot(old);
+        return p;
+    }
+
+    private boolean isWeb(BlockPos pos) {
+        return mc.level != null && mc.level.getBlockState(pos).getBlock() == Blocks.COBWEB;
     }
 
     private List<BlockPos> findWebs() {
@@ -176,17 +199,11 @@ public class AntiWeb extends Module {
         );
 
         BlockPos.betweenClosedStream(bodyBox.minmax(headBox))
-            .filter(pos -> {
-                assert mc.level != null;
-                return mc.level.getBlockState(pos).getBlock() == Blocks.COBWEB;
-            })
+            .filter(this::isWeb)
             .forEach(pos -> webs.add(pos.immutable()));
 
         for (BlockPos pos : occupied) {
-            assert mc.level != null;
-            if (mc.level.getBlockState(pos).getBlock() == Blocks.COBWEB && !webs.contains(pos)) {
-                webs.add(pos);
-            }
+            if (isWeb(pos) && !webs.contains(pos)) webs.add(pos);
         }
 
         return webs;
